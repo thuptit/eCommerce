@@ -6,6 +6,7 @@ namespace eCommerce.EntityFrameworkCore.Entities;
 public class User : IdentityUser<long>, IEntity<long>
 {
     public string Address { get; set; }
+    public bool IsAdmin { get; set; }
     public long CreatorId { get; set; }
     public DateTime CreationTime { get; set; }
     public long? ModifiorId { get; set; }
