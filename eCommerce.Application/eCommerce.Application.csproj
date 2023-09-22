@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentMediator" Version="0.4.7" />
+      <PackageReference Include="FluentValidation" Version="11.7.1" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
+      <PackageReference Include="MediatR" Version="12.1.1" />
+      <PackageReference Include="Volo.Abp.Core" Version="6.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\eCommerce.Domain\eCommerce.Domain.csproj" />
+    </ItemGroup>
+
+
+</Project>
