@@ -7,14 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.22" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
       <PackageReference Include="Volo.Abp.Core" Version="6.0.3" />
     </ItemGroup>
 
 
-    <ItemGroup>
-      <Folder Include="Commands\" />
-    </ItemGroup>
 
 </Project>

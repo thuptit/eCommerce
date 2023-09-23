@@ -8,11 +8,11 @@ var configuration = LocalConfigurationExtentions.GetConfigurationBuilder();
 
 builder.Services.AddSingleton(configuration);
 builder.Services.AddControllers();
+builder.Services.AddApplication<eCommerceHostModule>();
 builder.Services.AddMediatR(options =>
 {
-    options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    options.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
 });
-builder.Services.AddApplication<eCommerceHostModule>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
