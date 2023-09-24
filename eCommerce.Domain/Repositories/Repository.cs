@@ -1,3 +1,4 @@
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using eCommerce.EntityFrameworkCore;
 using eCommerce.EntityFrameworkCore.Audits;
@@ -9,7 +10,7 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     where TEntity : class, IEntity<TPrimaryKey>
 {
     private readonly DbSet<TEntity> _dbSet;
-
+    
     public Repository(eCommerceDbContext _context)
     {
         _dbSet = _context.Set<TEntity>();
@@ -77,22 +78,22 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
 
     public TEntity FirstOrDefault(TPrimaryKey id)
     {
-        throw new NotImplementedException();
+        return _dbSet.FirstOrDefault(x => id.Equals(x.Id));
     }
 
-    public Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
+    public async Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
     {
-        throw new NotImplementedException();
+        return await _dbSet.FirstOrDefaultAsync(x => id.Equals(x.Id));
     }
 
     public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return _dbSet.FirstOrDefault(predicate);
     }
 
-    public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _dbSet.FirstOrDefaultAsync(predicate);
     }
 
     public TEntity Load(TPrimaryKey id)
@@ -102,12 +103,14 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
 
     public TEntity Insert(TEntity entity)
     {
-        throw new NotImplementedException();
+        _dbSet.Add(entity);
+        return entity;
     }
 
-    public Task<TEntity> InsertAsync(TEntity entity)
+    public async Task<TEntity> InsertAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        await _dbSet.AddAsync(entity);
+        return entity;
     }
 
     public TPrimaryKey InsertAndGetId(TEntity entity)
