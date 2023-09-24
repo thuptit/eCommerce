@@ -1,6 +1,8 @@
-namespace eCommerce.Shared.DataTransferObjects.Authentications;
+using MediatR;
 
-public class RegisterAccountDto
+namespace eCommerce.Shared.Commands.Authentications;
+
+public class RegisterAccountCommand : IRequest<bool>
 {
     public string Username { get; set; }
     public string Email { get; set; }

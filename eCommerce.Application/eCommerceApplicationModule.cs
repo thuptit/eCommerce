@@ -13,6 +13,10 @@ public class eCommerceApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddMediatR(options =>
+        {
+            options.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+        });
         context.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         context.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
     }
