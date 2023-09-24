@@ -10,9 +10,10 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     where TEntity : class, IEntity<TPrimaryKey>
 {
     private readonly DbSet<TEntity> _dbSet;
-    
+    private readonly eCommerceDbContext _context;
     public Repository(eCommerceDbContext _context)
     {
+        this._context = _context;
         _dbSet = _context.Set<TEntity>();
     }
     public IQueryable<TEntity> GetAll()
@@ -115,121 +116,138 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
 
     public TPrimaryKey InsertAndGetId(TEntity entity)
     {
-        throw new NotImplementedException();
+        var newEntity = _dbSet.Add(entity);
+        _context.SaveChanges();
+        return newEntity.Entity.Id;
     }
 
-    public Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
+    public async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        var newEntity = await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        return newEntity.Entity.Id;
     }
 
     public TEntity InsertOrUpdate(TEntity entity)
     {
-        throw new NotImplementedException();
+        if (entity.Id.Equals(0))
+        {
+            return Insert(entity);
+        }
+
+        return Update(entity);
     }
 
-    public Task<TEntity> InsertOrUpdateAsync(TEntity entity)
+    public async Task<TEntity> InsertOrUpdateAsync(TEntity entity)
     {
-        throw new NotImplementedException();
-    }
+        if (entity.Id.Equals(0))
+        {
+            return await InsertAsync(entity);
+        }
 
-    public TPrimaryKey InsertOrUpdateAndGetId(TEntity entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<TPrimaryKey> InsertOrUpdateAndGetIdAsync(TEntity entity)
-    {
-        throw new NotImplementedException();
+        return await UpdateAsync(entity);
     }
 
     public TEntity Update(TEntity entity)
     {
-        throw new NotImplementedException();
+        _dbSet.Update(entity);
+        return entity;
     }
 
     public Task<TEntity> UpdateAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        _dbSet.Update(entity);
+        return Task.FromResult(entity);
     }
 
     public TEntity Update(TPrimaryKey id, Action<TEntity> updateAction)
     {
-        throw new NotImplementedException();
+        var entity = _dbSet.Find(id);
+        updateAction(entity);
+        return entity;
     }
 
-    public Task<TEntity> UpdateAsync(TPrimaryKey id, Func<TEntity, Task> updateAction)
+    public async Task<TEntity> UpdateAsync(TPrimaryKey id, Func<TEntity, Task> updateAction)
     {
-        throw new NotImplementedException();
+        var entity = await _dbSet.FindAsync(id);
+        var task =  updateAction(entity);
+        await task;
+        return entity;
     }
 
     public void Delete(TEntity entity)
     {
-        throw new NotImplementedException();
+        entity.IsDeleted = true;
+        _context.SaveChanges();
     }
 
-    public Task DeleteAsync(TEntity entity)
+    public async Task DeleteAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        entity.IsDeleted = true;
+        await _context.SaveChangesAsync();
     }
 
     public void Delete(TPrimaryKey id)
     {
-        throw new NotImplementedException();
+        var entity = FirstOrDefault(id);
+        if (entity == null)
+        {
+            throw new NullReferenceException("Not found Entity");
+        }
+
+        entity.IsDeleted = true;
+        _context.SaveChanges();
     }
 
-    public Task DeleteAsync(TPrimaryKey id)
+    public async Task DeleteAsync(TPrimaryKey id)
     {
-        throw new NotImplementedException();
-    }
+        var entity = await FirstOrDefaultAsync(id);
+        if (entity == null)
+        {
+            throw new NullReferenceException("Not found Entity");
+        }
 
-    public void Delete(Expression<Func<TEntity, bool>> predicate)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        throw new NotImplementedException();
+        entity.IsDeleted = true;
+        await _context.SaveChangesAsync();
     }
 
     public int Count()
     {
-        throw new NotImplementedException();
+        return _dbSet.Count();
     }
 
-    public Task<int> CountAsync()
+    public async Task<int> CountAsync()
     {
-        throw new NotImplementedException();
+        return await _dbSet.CountAsync();
     }
 
     public int Count(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return _dbSet.Where(predicate).Count();
     }
 
-    public Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _dbSet.Where(predicate).CountAsync();
     }
 
     public long LongCount()
     {
-        throw new NotImplementedException();
+        return _dbSet.LongCount();
     }
 
-    public Task<long> LongCountAsync()
+    public async Task<long> LongCountAsync()
     {
-        throw new NotImplementedException();
+        return await _dbSet.LongCountAsync();
     }
 
     public long LongCount(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return _dbSet.LongCount(predicate);
     }
 
-    public Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _dbSet.LongCountAsync(predicate);
     }
 }

@@ -165,26 +165,6 @@ public interface IRepository<TEntity, TPrimaryKey> : IRepositoryBase<TEntity, TP
     /// <param name="entity">Entity</param>
     Task<TEntity> InsertOrUpdateAsync(TEntity entity);
 
-    /// <summary>
-    /// Inserts or updates given entity depending on Id's value.
-    /// Also returns Id of the entity.
-    /// It may require to save current unit of work
-    /// to be able to retrieve id.
-    /// </summary>
-    /// <param name="entity">Entity</param>
-    /// <returns>Id of the entity</returns>
-    TPrimaryKey InsertOrUpdateAndGetId(TEntity entity);
-
-    /// <summary>
-    /// Inserts or updates given entity depending on Id's value.
-    /// Also returns Id of the entity.
-    /// It may require to save current unit of work
-    /// to be able to retrieve id.
-    /// </summary>
-    /// <param name="entity">Entity</param>
-    /// <returns>Id of the entity</returns>
-    Task<TPrimaryKey> InsertOrUpdateAndGetIdAsync(TEntity entity);
-
     #endregion
 
     #region Update
@@ -245,24 +225,6 @@ public interface IRepository<TEntity, TPrimaryKey> : IRepositoryBase<TEntity, TP
     /// <param name="id">Primary key of the entity</param>
     Task DeleteAsync(TPrimaryKey id);
 
-    /// <summary>
-    /// Deletes many entities by function.
-    /// Notice that: All entities fits to given predicate are retrieved and deleted.
-    /// This may cause major performance problems if there are too many entities with
-    /// given predicate.
-    /// </summary>
-    /// <param name="predicate">A condition to filter entities</param>
-    void Delete(Expression<Func<TEntity, bool>> predicate);
-
-    /// <summary>
-    /// Deletes many entities by function.
-    /// Notice that: All entities fits to given predicate are retrieved and deleted.
-    /// This may cause major performance problems if there are too many entities with
-    /// given predicate.
-    /// </summary>
-    /// <param name="predicate">A condition to filter entities</param>
-    Task DeleteAsync(Expression<Func<TEntity, bool>> predicate);
-
     #endregion
 
     #region Aggregates
@@ -280,7 +242,7 @@ public interface IRepository<TEntity, TPrimaryKey> : IRepositoryBase<TEntity, TP
     Task<int> CountAsync();
 
     /// <summary>
-    /// Gets count of all entities in this repository based on given <paramref name="predicate"/>.
+    /// Gets count of all entities in this repository based on given <paramref name="predicate"/>
     /// </summary>
     /// <param name="predicate">A method to filter count</param>
     /// <returns>Count of entities</returns>
