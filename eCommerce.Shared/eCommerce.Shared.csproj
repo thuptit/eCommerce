@@ -15,4 +15,9 @@
 
 
 
+    <ItemGroup>
+      <Folder Include="Exceptions\" />
+      <Folder Include="Filters\" />
+    </ItemGroup>
+
 </Project>

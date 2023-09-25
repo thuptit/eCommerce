@@ -38,13 +38,8 @@ namespace eCommerce.Host.Controllers
                 UserName = login.UserName,
                 Email = login.Email,
                 Id = login.Id,
-                //AccessToken = 
+                AccessToken = login.IsSucess ? await _mediator.Send(new TokenGenerationCommand(login)) : string.Empty
             };
-        }
-
-        private string GenerateAccessToken()
-        {
-            return string.Empty;
         }
         [HttpPost("Login")]
         [AllowAnonymous]
