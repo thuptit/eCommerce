@@ -1,3 +1,4 @@
+using eCommerce.Domain.Domains.Users;
 using eCommerce.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,4 +10,8 @@ namespace eCommerce.Domain;
 [DependsOn(typeof(eCommerceEntityFrameworkCoreModule))]
 public class eCommerceDomainModule : AbpModule
 {
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddTransient(typeof(UserDomain));
+    }
 }

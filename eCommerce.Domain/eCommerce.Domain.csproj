@@ -12,7 +12,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\eCommerce.EntityFrameworkCore\eCommerce.EntityFrameworkCore.csproj" />
+
     </ItemGroup>
+
+
 
 
 </Project>
