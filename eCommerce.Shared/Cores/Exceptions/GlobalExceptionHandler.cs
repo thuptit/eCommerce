@@ -6,6 +6,6 @@ public class GlobalExceptionHandler : IExceptionFilter
 {
     public void OnException(ExceptionContext context)
     {
-        throw new NotImplementedException();
+        //TODO:
     }
 }
