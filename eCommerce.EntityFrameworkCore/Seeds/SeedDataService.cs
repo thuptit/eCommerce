@@ -1,21 +1,27 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace eCommerce.EntityFrameworkCore.Seeds;
 
 public class SeedDataService : IHostedService
 {
-    private readonly eCommerceDbContext _dbContext;
+    private readonly IServiceScopeFactory _scopeFactory;
 
-    public SeedDataService(eCommerceDbContext context)
+    public SeedDataService(IServiceScopeFactory scopeFactory)
     {
-        _dbContext = context;
+        _scopeFactory = scopeFactory;
     }
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await _dbContext.Database.MigrateAsync();
-        var seed = new SeedData(_dbContext);
-        await seed.UserRoleSeed();
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var _dbContext = scope.ServiceProvider.GetService<eCommerceDbContext>();
+            await _dbContext.Database.MigrateAsync();
+            var seed = new SeedData(_dbContext);
+            await seed.UserRoleSeed();
+        }
+        
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

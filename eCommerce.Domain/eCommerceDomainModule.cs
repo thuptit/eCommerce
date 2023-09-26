@@ -13,5 +13,6 @@ public class eCommerceDomainModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddTransient(typeof(UserDomain));
+        context.Services.AddTransient(typeof(SignInDomain));
     }
 }

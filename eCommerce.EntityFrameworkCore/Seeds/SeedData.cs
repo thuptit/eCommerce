@@ -43,7 +43,8 @@ public class SeedData
                     {
                         UserName = eCommerceConsts.UserNameAdmin,
                         Email = "admin@thunv.com",
-                        IsAdmin = true
+                        IsAdmin = true,
+                        Address = "Ha Noi, Viet Nam"
                     };
                     var passwordHash = new PasswordHasher<User>();
                     var passwordAfterHash = passwordHash.HashPassword(user,eCommerceConsts.PasswordAdmin);
