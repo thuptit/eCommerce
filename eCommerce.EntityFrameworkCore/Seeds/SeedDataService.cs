@@ -14,6 +14,8 @@ public class SeedDataService : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await _dbContext.Database.MigrateAsync();
+        var seed = new SeedData(_dbContext);
+        await seed.UserRoleSeed();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
