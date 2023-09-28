@@ -35,15 +35,6 @@ public class eCommerceHostModule : AbpModule
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTToken:Key"]))
                 };
             });
-
-        // context.Services.AddAuthorization(options =>
-        // {
-        //     options.AddPolicy("default",policy =>
-        //     {
-        //         policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-        //         policy.Requirements.Add();
-        //     });
-        // });
         
         ConfigIdentity(context);
     }

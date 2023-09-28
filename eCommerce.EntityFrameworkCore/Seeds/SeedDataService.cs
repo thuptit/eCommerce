@@ -1,3 +1,5 @@
+using eCommerce.EntityFrameworkCore.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,8 +19,9 @@ public class SeedDataService : IHostedService
         using (var scope = _scopeFactory.CreateScope())
         {
             var _dbContext = scope.ServiceProvider.GetService<eCommerceDbContext>();
+            var _userManager = scope.ServiceProvider.GetService<UserManager<User>>();
             await _dbContext.Database.MigrateAsync();
-            var seed = new SeedData(_dbContext);
+            var seed = new SeedData(_dbContext, _userManager);
             await seed.UserRoleSeed();
         }
         

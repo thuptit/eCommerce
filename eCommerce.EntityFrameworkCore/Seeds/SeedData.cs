@@ -9,9 +9,11 @@ namespace eCommerce.EntityFrameworkCore.Seeds;
 public class SeedData
 {
     private readonly eCommerceDbContext _context;
-    public SeedData(eCommerceDbContext context)
+    private readonly UserManager<User> _userManager;
+    public SeedData(eCommerceDbContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
     public async Task UserRoleSeed()
     {
@@ -46,11 +48,7 @@ public class SeedData
                         IsAdmin = true,
                         Address = "Ha Noi, Viet Nam"
                     };
-                    var passwordHash = new PasswordHasher<User>();
-                    var passwordAfterHash = passwordHash.HashPassword(user,eCommerceConsts.PasswordAdmin);
-                    user.PasswordHash = passwordAfterHash;
-
-                    _context.Users.Add(user);
+                    await _userManager.CreateAsync(user, eCommerceConsts.PasswordAdmin);
                     await _context.SaveChangesAsync();
 
                     _context.UserRoles.Add(new IdentityUserRole<long>()

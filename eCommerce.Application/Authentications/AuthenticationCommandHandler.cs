@@ -56,13 +56,9 @@ public class AuthenticationCommandHandler
 
     public async Task<LoginDto> Handle(LoginAdminSiteCommand request, CancellationToken cancellationToken)
     {
-        var isLogged = await _signInDomain.PasswordSignInAsync(new User()
-        {
-            UserName = request.UserName,
-            IsAdmin = true
-        }, request.Password, false, true);
+        var isLogged = await _signInDomain.PasswordSignInAsync(request.UserName, request.Password, false, false);
 
-        if (!isLogged.Succeeded)
+        if (isLogged.Succeeded)
         {
             var user = await _userDomain.FindByNameAsync(request.UserName);
             return new LoginSucess(user.Id, user.UserName, user.Email, user.Address);

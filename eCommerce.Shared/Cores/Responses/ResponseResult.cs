@@ -2,6 +2,7 @@ using System.Net;
 
 namespace eCommerce.Shared.Cores.Responses;
 
+[Serializable]
 public class ResponseResult
 {
     public ResponseResult()

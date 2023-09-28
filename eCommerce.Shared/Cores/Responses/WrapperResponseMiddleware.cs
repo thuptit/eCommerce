@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -26,31 +25,49 @@ public class WrapperResponseMiddleware : IMiddleware
         {
             await next(context);
             
-            context.Response.ContentType = "application/json";
             responseBodyStream.Seek(0, SeekOrigin.Begin);
-            var responseBodyText = await new StreamReader(responseBodyStream).ReadToEndAsync();
+            var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();
+            var responseBodyJson = TryDeserializeObject(responseBody);
             ResponseResult wrappedResponse = new ResponseResult();
             if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
             {
                 wrappedResponse = new ResponseResult(HttpStatusCode.Unauthorized, "Unauthorized");
             }
+            else if (context.Response.StatusCode == (int)HttpStatusCode.MethodNotAllowed)
+            {
+                wrappedResponse = new ResponseResult(HttpStatusCode.MethodNotAllowed, "Method Not Allow");
+            }
             else
             {
-                wrappedResponse = new ResponseResult(responseBodyText);
+                wrappedResponse = new ResponseResult(responseBodyJson);
             }
-            var jsonBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(wrappedResponse));
-            await originalBody.WriteAsync(jsonBytes);
+            await originalBody.WriteAsync(JsonSerializer.Serialize(wrappedResponse).GetBytes());
         }
         catch (Exception ex)
         {
             context.Response.ContentType = "application/json";
-            var wrappedResponse = new ResponseResult((HttpStatusCode)context.Response.StatusCode, ex.Message);
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            var wrappedResponse = new ResponseResult(HttpStatusCode.InternalServerError, ex.Message);
             var jsonBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(wrappedResponse));
             await originalBody.WriteAsync(jsonBytes);
         }
         finally
         {
             context.Response.Body = originalBody;
+            originalBody.Close();
+            responseBodyStream.Close();
+        }
+    }
+
+    private object TryDeserializeObject(string json)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<object>(json);
+        }
+        catch
+        {
+            return json;
         }
     }
 }
