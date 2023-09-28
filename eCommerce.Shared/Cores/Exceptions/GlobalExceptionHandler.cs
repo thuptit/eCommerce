@@ -7,5 +7,11 @@ public class GlobalExceptionHandler : IExceptionFilter
     public void OnException(ExceptionContext context)
     {
         //TODO:
+        WrapperException();
+    }
+
+    private void WrapperException()
+    {
+        
     }
 }

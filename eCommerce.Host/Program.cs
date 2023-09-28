@@ -1,5 +1,6 @@
 using System.Reflection;
 using eCommerce.Host;
+using eCommerce.Shared.Cores.Responses;
 using eCommerce.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
+app.UseMiddleware<WrapperResponseMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

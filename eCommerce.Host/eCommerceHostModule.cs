@@ -20,6 +20,7 @@ public class eCommerceHostModule : AbpModule
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,options =>
             {
@@ -34,6 +35,15 @@ public class eCommerceHostModule : AbpModule
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTToken:Key"]))
                 };
             });
+
+        // context.Services.AddAuthorization(options =>
+        // {
+        //     options.AddPolicy("default",policy =>
+        //     {
+        //         policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+        //         policy.Requirements.Add();
+        //     });
+        // });
         
         ConfigIdentity(context);
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,11 @@ namespace eCommerce.Host.Controllers
     public class UserController : ControllerBase
     {
         [HttpGet]
-        public async Task Get()
+        [Authorize]
+        public async Task<string> Get()
         {
             await Task.CompletedTask;
+            return "Hêlo";
         }
     }
 }
