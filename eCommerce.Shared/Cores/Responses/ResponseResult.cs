@@ -6,7 +6,6 @@ public class ResponseResult
 {
     public ResponseResult()
     {
-        
     }
     public ResponseResult(object _result)
     {
