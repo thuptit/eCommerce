@@ -111,6 +111,7 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     public async Task<TEntity> InsertAsync(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
         return entity;
     }
 

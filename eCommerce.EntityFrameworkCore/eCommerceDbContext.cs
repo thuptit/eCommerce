@@ -1,4 +1,5 @@
-﻿using eCommerce.EntityFrameworkCore.Audits;
+﻿using System.Reflection;
+using eCommerce.EntityFrameworkCore.Audits;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using eCommerce.EntityFrameworkCore.Entities;
@@ -14,7 +15,7 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>
     //protected 
     public override int SaveChanges()
     {
-        
+        ApplyAudits();
         return base.SaveChanges();
     }
 
@@ -23,11 +24,14 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>
         ChangeTracker.DetectChanges();
         foreach (var entity in ChangeTracker.Entries())
         {
-            if (entity.State == EntityState.Detached || entity.State == EntityState.Unchanged ||
-                !entity.GetType().IsAssignableFrom(typeof(IEntity<>)))
+            var typeIEntity = typeof(IEntity<>);
+            var typeEntity = entity.GetType();
+
+            bool isIEntity = true;
+            if (entity.State == EntityState.Detached || entity.State == EntityState.Unchanged )
                 continue;
 
-            if (entity.GetType().IsAssignableFrom(typeof(IEntity<>)))
+            if (isIEntity)
             {
                 switch (entity.State)
                 {
@@ -45,9 +49,10 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>
                         }
                         else
                         {
-                            //var 
+                            var modifiedEntity = entity as IModificationAudit;
+                            modifiedEntity.ModificationTime = DateTime.Now;
+                            modifiedEntity.ModifiorId = _session.UserId;
                         }
-
                         break;
                 }
             }
@@ -57,7 +62,14 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
+        ApplyAudits();
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+    {
+        ApplyAudits();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
     private readonly IEcommerceSession _session;

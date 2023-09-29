@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using eCommerce.Domain.Domains.Users;
+using eCommerce.Domain.Domains;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared.Commands.Authentications;
 using eCommerce.Shared.DataTransferObjects.Authentications;

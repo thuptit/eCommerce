@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using eCommerce.EntityFrameworkCore;
@@ -11,9 +12,10 @@ using eCommerce.EntityFrameworkCore;
 namespace eCommerce.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(eCommerceDbContext))]
-    partial class eCommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230929093858_update-Category-entity")]
+    partial class updateCategoryentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,27 +31,6 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("CreatorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("DeletorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("ModifiorId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .IsRequired()
