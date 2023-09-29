@@ -19,5 +19,12 @@ namespace eCommerce.Host.Controllers
             await Task.CompletedTask;
             return "Hêlo";
         }
+
+        [HttpGet]
+        [Authorize("Admin")]
+        public async Task<string> CreateStaff()
+        {
+            
+        } 
     }
 }
