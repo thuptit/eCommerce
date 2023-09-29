@@ -32,12 +32,12 @@ namespace eCommerce.Host.Controllers
         public async Task<LoginResponseDto> LoginAdminSite(LoginAdminSiteCommand command)
         {
             var login = await _mediator.Send(command);
-
             return new LoginResponseDto()
             {
                 UserName = login.UserName,
                 Email = login.Email,
                 Id = login.Id,
+                Roles = login.Roles,
                 AccessToken = login.IsSucess ? await _mediator.Send(new TokenGenerationCommand(login)) : string.Empty
             };
         }

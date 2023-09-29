@@ -61,7 +61,8 @@ public class AuthenticationCommandHandler
         if (isLogged.Succeeded)
         {
             var user = await _userDomain.FindByNameAsync(request.UserName);
-            return new LoginSucess(user.Id, user.UserName, user.Email, user.Address);
+            var roles = await _userDomain.GetRolesAsync(user);
+            return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles);
         }
 
         return new LoginFail();
@@ -80,7 +81,8 @@ public class AuthenticationCommandHandler
                 new Claim(JwtRegisteredClaimNames.Sub, request.data.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, request.data.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,
-                    Guid.NewGuid().ToString())
+                    Guid.NewGuid().ToString()),
+                new Claim("Role",string.Join(",",request.data.Roles))
             }),
             Issuer = issuer,
             Audience = audience,

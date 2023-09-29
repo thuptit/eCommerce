@@ -15,12 +15,12 @@ public class eCommerceSharedModule : AbpModule
             options.AddPolicy("Admin", policy =>
             {
                 policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-                policy.RequireClaim("Role", "Admin");
+                policy.RequireClaim("Role", eCommerceConsts.RoleAdmin);
             });
             options.AddPolicy("Staff", policy =>
             {
                 policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-                policy.RequireClaim("Role", "Staff");
+                policy.RequireClaim("Role", eCommerceConsts.RoleStaff);
             });
         });
     }

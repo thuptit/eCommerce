@@ -13,7 +13,7 @@ namespace eCommerce.Host.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Staff")]
         public async Task<string> Get()
         {
             await Task.CompletedTask;

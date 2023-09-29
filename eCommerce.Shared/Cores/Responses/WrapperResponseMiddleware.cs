@@ -25,6 +25,7 @@ public class WrapperResponseMiddleware : IMiddleware
         {
             await next(context);
             
+            context.Response.ContentType = "application/json";
             responseBodyStream.Seek(0, SeekOrigin.Begin);
             var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();
             var responseBodyJson = TryDeserializeObject(responseBody);
@@ -32,6 +33,10 @@ public class WrapperResponseMiddleware : IMiddleware
             if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
             {
                 wrappedResponse = new ResponseResult(HttpStatusCode.Unauthorized, "Unauthorized");
+            }
+            else if (context.Response.StatusCode == (int)HttpStatusCode.Forbidden)
+            {
+                wrappedResponse = new ResponseResult(HttpStatusCode.Forbidden, "Not Permission");
             }
             else if (context.Response.StatusCode == (int)HttpStatusCode.MethodNotAllowed)
             {
