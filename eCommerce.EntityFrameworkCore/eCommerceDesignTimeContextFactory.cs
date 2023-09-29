@@ -20,6 +20,6 @@ public class eCommerceDesignTimeContextFactory : IDesignTimeDbContextFactory<eCo
         var configuration = LocalConfigurationExtentions.GetConfigurationBuilder(basePathConfig);
         optionsBuilder.UseNpgsql(configuration.GetConnectionString("Default"));
 
-        return new eCommerceDbContext(optionsBuilder.Options);
+        return new eCommerceDbContext(optionsBuilder.Options, null);
     }
 }

@@ -24,7 +24,8 @@ namespace eCommerce.Host.Controllers
         [Authorize("Admin")]
         public async Task<string> CreateStaff()
         {
-            
+            await Task.CompletedTask;
+            return string.Empty;
         } 
     }
 }
