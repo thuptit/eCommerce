@@ -20,7 +20,7 @@ namespace eCommerce.Host.Controllers
             return "Hêlo";
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize("Admin")]
         public async Task<string> CreateStaff()
         {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace eCommerce.Domain.Domains.Users;
+namespace eCommerce.Domain.Domains;
 
 public class SignInDomain : SignInManager<User>
 {

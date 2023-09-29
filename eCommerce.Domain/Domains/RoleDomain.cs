@@ -2,7 +2,7 @@ using eCommerce.EntityFrameworkCore.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace eCommerce.Domain.Domains.Users;
+namespace eCommerce.Domain.Domains;
 
 public class RoleDomain : RoleManager<Role>
 {
