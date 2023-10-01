@@ -22,36 +22,30 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>
     public void ApplyAudits()
     {
         ChangeTracker.DetectChanges();
-        foreach (var entity in ChangeTracker.Entries())
+        foreach (var entry in ChangeTracker.Entries())
         {
-            var typeIEntity = typeof(IEntity<>);
-            var typeEntity = entity.GetType();
-
-            bool isIEntity = true;
-            if (entity.State == EntityState.Detached || entity.State == EntityState.Unchanged )
+            var entity = entry.Entity as IEntity; 
+            if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged || entity is null)
                 continue;
 
-            if (isIEntity)
+            if (entity is not null)
             {
-                switch (entity.State)
+                switch (entry.State)
                 {
                     case EntityState.Added:
-                        var addedEntity = entity as ICreationAudit;
-                        addedEntity.CreationTime = DateTime.Now;
-                        addedEntity.CreatorId = _session.UserId;
+                        entity.CreationTime = DateTime.Now;
+                        entity.CreatorId = _session.UserId;
                         break;
                     case EntityState.Modified:
-                        var deletedEntity = entity as IDeletionAudit;
-                        if (deletedEntity.IsDeleted)
+                        if (entity.IsDeleted)
                         {
-                            deletedEntity.DeletionTime = DateTime.Now;
-                            deletedEntity.DeletorId = _session.UserId;
+                            entity.DeletionTime = DateTime.Now;
+                            entity.DeletorId = _session.UserId;
                         }
                         else
                         {
-                            var modifiedEntity = entity as IModificationAudit;
-                            modifiedEntity.ModificationTime = DateTime.Now;
-                            modifiedEntity.ModifiorId = _session.UserId;
+                            entity.ModificationTime = DateTime.Now;
+                            entity.ModifiorId = _session.UserId;
                         }
                         break;
                 }

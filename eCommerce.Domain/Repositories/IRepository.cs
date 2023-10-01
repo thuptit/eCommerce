@@ -284,4 +284,7 @@ public interface IRepository<TEntity, TPrimaryKey> : IRepositoryBase<TEntity, TP
     Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate);
 
     #endregion
+
+    int SaveChanges();
+    Task<int> SaveChangesAsync();
 }

@@ -1,6 +1,6 @@
 namespace eCommerce.EntityFrameworkCore.Audits;
 
-public abstract class EntityBase<TPrimaryKey> : IEntity<TPrimaryKey>
+public class EntityBase<TPrimaryKey> : IEntity<TPrimaryKey>
 {
     public TPrimaryKey Id { get; set; }
     public long? CreatorId { get; set; }

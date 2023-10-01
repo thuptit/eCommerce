@@ -111,7 +111,6 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     public async Task<TEntity> InsertAsync(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
-        await _context.SaveChangesAsync();
         return entity;
     }
 
@@ -179,13 +178,11 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     public void Delete(TEntity entity)
     {
         entity.IsDeleted = true;
-        _context.SaveChanges();
     }
 
     public async Task DeleteAsync(TEntity entity)
     {
         entity.IsDeleted = true;
-        await _context.SaveChangesAsync();
     }
 
     public void Delete(TPrimaryKey id)
@@ -197,7 +194,6 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
         }
 
         entity.IsDeleted = true;
-        _context.SaveChanges();
     }
 
     public async Task DeleteAsync(TPrimaryKey id)
@@ -209,7 +205,6 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
         }
 
         entity.IsDeleted = true;
-        await _context.SaveChangesAsync();
     }
 
     public int Count()
@@ -251,4 +246,11 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     {
         return await _dbSet.LongCountAsync(predicate);
     }
+
+    public int SaveChanges()
+    {
+        return _context.SaveChanges();
+    }
+
+    public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
 }
