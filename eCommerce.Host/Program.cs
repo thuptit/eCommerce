@@ -6,7 +6,7 @@ using eCommerce.Shared.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = LocalConfigurationExtentions.GetConfigurationBuilder();
-
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddSingleton(configuration);
 builder.Services.AddControllers();
 builder.Services.AddApplication<eCommerceHostModule>();

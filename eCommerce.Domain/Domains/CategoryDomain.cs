@@ -27,5 +27,6 @@ public class CategoryDomain : BaseDomain<CategoryDomain>
         {
             Name = command.Name
         });
+        await _repository.SaveChangesAsync();
     }
 }
