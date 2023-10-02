@@ -1,5 +1,6 @@
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.EntityFrameworkCore.Seeds;
+using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Shared;
 using eCommerce.Shared.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -30,5 +31,6 @@ public class eCommerceEntityFrameworkCoreModule : AbpModule
             .AddDefaultTokenProviders();
 
         context.Services.AddHostedService<SeedDataService>();
+        context.Services.AddScoped(typeof(UnitOfWorkMiddleware));
     }
 }

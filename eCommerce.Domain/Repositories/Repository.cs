@@ -2,6 +2,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using eCommerce.EntityFrameworkCore;
 using eCommerce.EntityFrameworkCore.Audits;
+using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Domain.Repositories;
@@ -11,9 +12,17 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
 {
     private readonly DbSet<TEntity> _dbSet;
     private readonly eCommerceDbContext _context;
-    public Repository(eCommerceDbContext _context)
+
+    public IUnitOfWork CurrentUnitOfWork
     {
-        this._context = _context;
+        get
+        {
+            return _context;
+        }
+    }
+    public Repository(eCommerceDbContext context)
+    {
+        _context = context;
         _dbSet = _context.Set<TEntity>();
     }
     public IQueryable<TEntity> GetAll()
@@ -246,11 +255,4 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     {
         return await _dbSet.LongCountAsync(predicate);
     }
-
-    public int SaveChanges()
-    {
-        return _context.SaveChanges();
-    }
-
-    public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
 }
