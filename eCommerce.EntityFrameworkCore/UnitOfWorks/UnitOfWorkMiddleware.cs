@@ -15,10 +15,30 @@ public class UnitOfWorkMiddleware : IMiddleware
     }
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        _logger.LogInformation("Start Transaction");
-        await _context.BeginTransactionAsync();
-        await next(context);
-        await _context.CommitAsync();
-        _logger.LogInformation("End Transaction");
+        if (IsTransactional(context))
+        {
+            _logger.LogInformation("Start Transaction");
+            await _context.BeginTransactionAsync();
+            await next(context);
+            await _context.CommitAsync();
+            _logger.LogInformation("End Transaction");
+        }
+        else
+        {
+            await next(context);
+        }
+    }
+
+    private bool IsTransactional(HttpContext context)
+    {
+        var endPoint = context.GetEndpoint();
+
+        var transactionAttribute = endPoint.Metadata.GetMetadata<UnitOfWorkAttribute>();
+        if (transactionAttribute != null && transactionAttribute.isTransactional)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
