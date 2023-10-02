@@ -2,6 +2,7 @@ using System.Data;
 using eCommerce.Domain.Repositories;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared.Commands.Categories;
+using eCommerce.Shared.DataTransferObjects.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -28,5 +29,16 @@ public class CategoryDomain : BaseDomain<CategoryDomain>
             Name = command.Name
         });
         await _repository.CurrentUnitOfWork.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<CategoryDto>> GetAll()
+    {
+        return await _repository.GetAll()
+            .Select(x => new CategoryDto()
+            {
+                Id = x.Id,
+                Name = x.Name
+            })
+            .ToListAsync();
     }
 }

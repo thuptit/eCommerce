@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eCommerce.Shared;
 using eCommerce.Shared.Commands.Categories;
+using eCommerce.Shared.DataTransferObjects.Categories;
+using eCommerce.Shared.Queries.Categories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Host.Controllers
@@ -21,9 +23,9 @@ namespace eCommerce.Host.Controllers
         }
         // GET: api/Category
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<CategoryDto>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await _mediator.Send(new GetAllCategoryQuery());
         }
 
         // GET: api/Category/5

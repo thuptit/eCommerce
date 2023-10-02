@@ -1,8 +1,10 @@
-﻿using System.Reflection;
+﻿using System.Linq.Expressions;
+using System.Reflection;
 using eCommerce.EntityFrameworkCore.Audits;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using eCommerce.EntityFrameworkCore.Entities;
+using eCommerce.EntityFrameworkCore.Intercepters;
 using eCommerce.Shared.Cores.Sessions;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -50,6 +52,18 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IEcommerceD
                 }
             }
             
+        }
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
+            {
+                entityType.AddSoftDeleteQuery();
+            }
         }
     }
 
