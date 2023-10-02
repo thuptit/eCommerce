@@ -1,4 +1,5 @@
 using System.Reflection;
+using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Host;
 using eCommerce.Shared.Cores.Responses;
 using eCommerce.Shared.Extensions;
@@ -28,5 +29,6 @@ app.UseHttpsRedirection();
 app.UseMiddleware<WrapperResponseMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<UnitOfWorkMiddleware>();
 app.MapControllers();
 app.Run();

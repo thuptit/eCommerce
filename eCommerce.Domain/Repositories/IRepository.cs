@@ -1,11 +1,13 @@
 using System.Linq.Expressions;
 using eCommerce.EntityFrameworkCore.Audits;
+using eCommerce.EntityFrameworkCore.UnitOfWorks;
 
 namespace eCommerce.Domain.Repositories;
 
 public interface IRepository<TEntity, TPrimaryKey> : IRepositoryBase<TEntity, TPrimaryKey>
     where TEntity : class, IEntity<TPrimaryKey>
 {
+    IUnitOfWork CurrentUnitOfWork { get; }
     #region Select/Get/Query
 
     /// <summary>
@@ -284,7 +286,4 @@ public interface IRepository<TEntity, TPrimaryKey> : IRepositoryBase<TEntity, TP
     Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate);
 
     #endregion
-
-    int SaveChanges();
-    Task<int> SaveChangesAsync();
 }
