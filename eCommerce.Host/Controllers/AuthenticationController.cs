@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using eCommerce.Shared.Commands.Authentications;
 using eCommerce.Shared.DataTransferObjects.Authentications;
@@ -32,13 +33,16 @@ namespace eCommerce.Host.Controllers
         public async Task<LoginResponseDto> LoginAdminSite(LoginAdminSiteCommand command)
         {
             var login = await _mediator.Send(command);
+            if (!login.IsSucess)
+                throw new AuthenticationException("Login failed");
+            
             return new LoginResponseDto()
             {
                 UserName = login.UserName,
                 Email = login.Email,
-                Id = login.Id,
+                UserId = login.Id,
                 Roles = login.Roles,
-                AccessToken = login.IsSucess ? await _mediator.Send(new TokenGenerationCommand(login)) : string.Empty
+                AccessToken = await _mediator.Send(new TokenGenerationCommand(login))
             };
         }
         [HttpPost("Login")]

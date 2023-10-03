@@ -4,7 +4,7 @@ public class LoginResponseDto
 {
     public string UserName { get; set; }
     public string Email { get; set; }
-    public long Id { get; set; }
+    public long UserId { get; set; }
     public string AccessToken { get; set; }
     public IList<string> Roles { get; set; }
 }
