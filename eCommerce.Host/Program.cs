@@ -25,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("default");
 app.UseHttpsRedirection();
 app.UseMiddleware<WrapperResponseMiddleware>();
 app.UseAuthentication();

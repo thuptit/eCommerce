@@ -35,7 +35,22 @@ public class eCommerceHostModule : AbpModule
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTToken:Key"]))
                 };
             });
-        
+        context.Services.AddCors(
+            options => options.AddPolicy(
+                "default",
+                builder => builder
+                    .WithOrigins(
+                        // App:CorsOrigins in appsettings.json can contain more than one address separated by comma.
+                        configuration["CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+            )
+        );
         ConfigIdentity(context);
     }
 
