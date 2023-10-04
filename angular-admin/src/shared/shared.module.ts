@@ -11,7 +11,10 @@ import { HeaderHttpInterceptor } from "src/core/interceptors/header-http.interce
 import { TransformResponseInterceptor } from "src/core/interceptors/transform-response.interceptor";
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { NbColumnsService, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { NbColumnsService, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
 
 @NgModule({
     declarations: [
@@ -28,7 +31,12 @@ import { NbColumnsService, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThem
         NbSidebarModule,
         NbThemeModule,
         NbLayoutModule,
-        NbEvaIconsModule
+        NbEvaIconsModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatCardModule,
+        NbIconModule,
+        NbInputModule
     ],
     exports: [
         MatFormFieldModule,
@@ -42,7 +50,12 @@ import { NbColumnsService, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThem
         NbSidebarModule,
         NbThemeModule,
         NbLayoutModule,
-        NbEvaIconsModule
+        NbEvaIconsModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatCardModule,
+        NbIconModule,
+        NbInputModule
     ],
     providers: [
         AuthGuard,
