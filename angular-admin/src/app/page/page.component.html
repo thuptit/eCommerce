@@ -1,2 +1,26 @@
-<p>page works!</p>
-<router-outlet></router-outlet>
+<nb-layout>
+  <nb-layout-header fixed>
+    <div class="row w-100">
+      <div class="col d-flex align-items-center">
+        <h6>eCommerce Management</h6>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <nb-user
+          size="large"
+          [name]="userInfo.userName"
+          [title]="userInfo.roles[0]"
+          color="#cccccc"
+        >
+        </nb-user>
+      </div>
+    </div>
+  </nb-layout-header>
+
+  <nb-sidebar>
+    <app-menu-bar></app-menu-bar>
+  </nb-sidebar>
+
+  <nb-layout-column>
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+</nb-layout>
