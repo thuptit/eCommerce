@@ -9,8 +9,14 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { ToastrModule } from "ngx-toastr";
 import { HeaderHttpInterceptor } from "src/core/interceptors/header-http.interceptor";
 import { TransformResponseInterceptor } from "src/core/interceptors/transform-response.interceptor";
+import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { NbColumnsService, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
 
 @NgModule({
+    declarations: [
+        MenuBarComponent
+    ],
     imports: [
         MatFormFieldModule,
         ReactiveFormsModule,
@@ -18,6 +24,11 @@ import { TransformResponseInterceptor } from "src/core/interceptors/transform-re
         MatButtonModule,
         HttpClientModule,
         ToastrModule.forRoot(),
+        NbMenuModule,
+        NbSidebarModule,
+        NbThemeModule,
+        NbLayoutModule,
+        NbEvaIconsModule
     ],
     exports: [
         MatFormFieldModule,
@@ -25,7 +36,13 @@ import { TransformResponseInterceptor } from "src/core/interceptors/transform-re
         MatInputModule,
         MatButtonModule,
         HttpClientModule,
-        ToastrModule
+        ToastrModule,
+        MenuBarComponent,
+        NbMenuModule,
+        NbSidebarModule,
+        NbThemeModule,
+        NbLayoutModule,
+        NbEvaIconsModule
     ],
     providers: [
         AuthGuard,
