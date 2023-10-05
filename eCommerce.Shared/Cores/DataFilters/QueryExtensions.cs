@@ -11,7 +11,7 @@ public static class QueryExtensions
         where T : class
     {
         query = query.ApplyFilterSearch(gridParam);
-        var paging = await query.Take(gridParam.PageSize).Skip(gridParam.PageSize * gridParam.PageIndex).ToListAsync();
+        var paging = await query.Skip(gridParam.PageSize * gridParam.PageIndex).Take(gridParam.PageSize).ToListAsync();
         var totalCount = await query.CountAsync();
         return new PagingBase<T>(paging,totalCount);
     }
@@ -34,30 +34,54 @@ public static class QueryExtensions
             if (searchFitlers.Count == 0 )
                 goto ContinueLogic;
             
-            var typeOfDto = typeof(T);
-            var parameter = Expression.Parameter(typeOfDto, "x");
-            Expression orCondition = null;
-            foreach (var filter in searchFitlers)
-            {
-                var property = Expression.PropertyOrField(parameter, filter.PropertyName);
-                var conditionExpression = Expression.Call(
-                    Expression.PropertyOrField(parameter, filter.PropertyName),
-                    ExpressionRetriver.containsMethod,
-                    Expression.Constant(searchTerm)
-                );
-                if (orCondition == null)
-                {
-                    orCondition = conditionExpression;
-                }
-                else
-                {
-                    orCondition = Expression.OrElse(orCondition, conditionExpression);
-                }
-            }
-            query = query.Where(Expression.Lambda<Func<T,bool>>(orCondition,parameter));
+            var searchExpression = CombineSearch(query, searchTerm, searchFitlers);
+            query = query.Where(searchExpression);
         }
         
         ContinueLogic:
+        if (!string.IsNullOrEmpty(gridParam.Sort) && !string.IsNullOrEmpty(gridParam.SortDirection))
+        {
+            query = query.OrderBy(gridParam.Sort, gridParam.SortDirection);
+        }
         return query;
+    }
+
+    public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string sortProperty, string sortOrder)
+    {
+        var type = typeof(T);
+        var parameter = Expression.Parameter(type, "x");
+        var property = Expression.PropertyOrField(parameter, sortProperty);
+        var methodName = sortOrder == "ASC" ? "OrderBy" : "OrderByDescending";
+        var ex = Expression.Lambda(property, parameter);
+        var typeArguments = new Type[] { type, property.Type };
+        var result = Expression.Call(typeof(Queryable), methodName, typeArguments, source.Expression,Expression.Quote(ex));
+        return source.Provider.CreateQuery<T>(result);
+    }
+
+    private static Expression<Func<T, bool>> CombineSearch<T>(IQueryable<T> query, string searchTerm,
+        List<ExpressionFilter> filters)
+    {
+        var typeOfDto = typeof(T);
+        var parameter = Expression.Parameter(typeOfDto, "x");
+        Expression orCondition = null;
+        foreach (var filter in filters)
+        {
+            var property = Expression.PropertyOrField(parameter, filter.PropertyName);
+            var conditionExpression = Expression.Call(
+                Expression.PropertyOrField(parameter, filter.PropertyName),
+                ExpressionRetriver.containsMethod,
+                Expression.Constant(searchTerm)
+            );
+            if (orCondition == null)
+            {
+                orCondition = conditionExpression;
+            }
+            else
+            {
+                orCondition = Expression.OrElse(orCondition, conditionExpression);
+            }
+        }
+
+        return Expression.Lambda<Func<T, bool>>(orCondition, parameter);
     }
 }

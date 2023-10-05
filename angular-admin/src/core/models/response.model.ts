@@ -4,3 +4,7 @@ export interface ResponseApi<T> {
     Result?: T;
     ErrorMessages: string;
 }
+export interface PagingModel<T> {
+    totalCount: number;
+    items: T[];
+}
