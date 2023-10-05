@@ -5,7 +5,7 @@ namespace eCommerce.Shared.Cores.DataFilters;
 
 public static class ExpressionRetriver
 {
-    public static MethodInfo containsMethod = typeof(string).GetMethod("Contains", BindingFlags.Default, new Type[]{typeof(string)});
+    public static MethodInfo containsMethod = typeof(string).GetMethod("Contains", new Type[]{typeof(string)});
     public static MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new Type[]{typeof(string)});
     public static MethodInfo endsWithMethod = typeof(string).GetMethod("EndsWith", new Type[]{typeof(string)});
 
