@@ -2,6 +2,7 @@ using System.Data;
 using eCommerce.Domain.Repositories;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared.Commands.Categories;
+using eCommerce.Shared.Cores.DataFilters;
 using eCommerce.Shared.DataTransferObjects.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,8 @@ public class CategoryDomain : BaseDomain<CategoryDomain>
         }
         await _repository.InsertAsync(new Category()
         {
-            Name = command.Name
+            Name = command.Name,
+            Description = command.Description
         });
         await _repository.CurrentUnitOfWork.SaveChangesAsync();
     }
@@ -40,5 +42,17 @@ public class CategoryDomain : BaseDomain<CategoryDomain>
                 Name = x.Name
             })
             .ToListAsync();
+    }
+
+    public async Task<PagingBase<CategoryDto>> GetAllPaging(GetAllPagingQuery param)
+    {
+        var query = _repository.GetAll()
+            .Select(x => new CategoryDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description
+            });
+        return await query.GetPagingResultAsync(param);
     }
 }

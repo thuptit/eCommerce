@@ -7,7 +7,7 @@ namespace eCommerce.Shared.Cores.DataFilters;
 
 public static class QueryExtensions
 {
-    public static async Task<PagingBase<T>> GetAllPaging<T>(this IQueryable<T> query,GridParam gridParam) 
+    public static async Task<PagingBase<T>> GetPagingResultAsync<T>(this IQueryable<T> query,GridParam gridParam) 
         where T : class
     {
         query = query.ApplyFilterSearch(gridParam);
@@ -17,7 +17,7 @@ public static class QueryExtensions
     }
     private static IQueryable<T> ApplyFilterSearch<T>(this IQueryable<T> query, GridParam gridParam)
     {
-        var searchTerm = gridParam.SearchText.EmptyIfNull().Trim().ToLower();
+        var searchTerm = gridParam.SearchText.EmptyIfNull().Trim();
         if (!string.IsNullOrEmpty(searchTerm))
         {
             var searchFitlers = typeof(T).GetProperties()
@@ -34,15 +34,17 @@ public static class QueryExtensions
             if (searchFitlers.Count == 0 )
                 goto ContinueLogic;
             
-            var expressionSearchConstant = Expression.Constant(searchTerm.EmptyIfNull().Trim().ToLower());
             var typeOfDto = typeof(T);
             var parameter = Expression.Parameter(typeOfDto, "x");
             Expression orCondition = null;
             foreach (var filter in searchFitlers)
             {
                 var property = Expression.PropertyOrField(parameter, filter.PropertyName);
-                var conditionExpression =
-                    Expression.Call(property, ExpressionRetriver.containsMethod, expressionSearchConstant);
+                var conditionExpression = Expression.Call(
+                    Expression.PropertyOrField(parameter, filter.PropertyName),
+                    ExpressionRetriver.containsMethod,
+                    Expression.Constant(searchTerm)
+                );
                 if (orCondition == null)
                 {
                     orCondition = conditionExpression;
@@ -52,7 +54,6 @@ public static class QueryExtensions
                     orCondition = Expression.OrElse(orCondition, conditionExpression);
                 }
             }
-
             query = query.Where(Expression.Lambda<Func<T,bool>>(orCondition,parameter));
         }
         

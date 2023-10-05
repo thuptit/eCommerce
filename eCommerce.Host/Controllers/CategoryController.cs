@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using eCommerce.Shared;
 using eCommerce.Shared.Commands.Categories;
+using eCommerce.Shared.Cores.DataFilters;
 using eCommerce.Shared.DataTransferObjects.Categories;
 using eCommerce.Shared.Queries.Categories;
 using MediatR;
@@ -53,6 +54,12 @@ namespace eCommerce.Host.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+        // GET: api/Category/GetAllPaging
+        [HttpGet("GetAllPaging")]
+        public async Task<PagingBase<CategoryDto>> GetAllPaging(GetAllPagingQuery query)
+        {
+            return await _mediator.Send(query);
         }
     }
 }
