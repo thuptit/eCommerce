@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export abstract class BaseService {
-  protected apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl;
   constructor(_httpClient: HttpClient) { }
   get rootUrl(): string {
     return this.apiUrl + this.GetUrlService();

@@ -4,9 +4,9 @@ namespace eCommerce.Shared.Cores.DataFilters;
 
 public class GridParam
 {
-    public string Sort { get; set; }
-    public string SortDirection { get; set; }
-    public string SearchText { get; set; }
+    public string? Sort { get; set; }
+    public string? SortDirection { get; set; }
+    public string? SearchText { get; set; }
     public int PageSize { get; set; }
     public int PageIndex { get; set; }
 }

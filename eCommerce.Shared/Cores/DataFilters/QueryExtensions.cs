@@ -11,7 +11,7 @@ public static class QueryExtensions
         where T : class
     {
         query = query.ApplyFilterSearch(gridParam);
-        var paging = await query.Take(gridParam.PageSize).Skip(gridParam.PageSize * gridParam.PageIndex).ToListAsync();
+        var paging = await query.Skip(gridParam.PageSize * gridParam.PageIndex).Take(gridParam.PageSize).ToListAsync();
         var totalCount = await query.CountAsync();
         return new PagingBase<T>(paging,totalCount);
     }

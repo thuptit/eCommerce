@@ -42,6 +42,10 @@ public class WrapperResponseMiddleware : IMiddleware
             {
                 wrappedResponse = new ResponseResult(HttpStatusCode.MethodNotAllowed, "Method Not Allow");
             }
+            else if (context.Response.StatusCode == (int)HttpStatusCode.BadRequest)
+            {
+                wrappedResponse = new ResponseResult(HttpStatusCode.BadRequest, responseBodyJson.ToString());
+            }
             else
             {
                 wrappedResponse = new ResponseResult(responseBodyJson);

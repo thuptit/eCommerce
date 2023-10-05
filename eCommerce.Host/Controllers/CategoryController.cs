@@ -56,8 +56,8 @@ namespace eCommerce.Host.Controllers
         {
         }
         // GET: api/Category/GetAllPaging
-        [HttpGet("GetAllPaging")]
-        public async Task<PagingBase<CategoryDto>> GetAllPaging(GetAllPagingQuery query)
+        [HttpPost("GetAllPaging")]
+        public async Task<PagingBase<CategoryDto>> GetAllPaging([FromBody]GetAllPagingQuery query)
         {
             return await _mediator.Send(query);
         }
