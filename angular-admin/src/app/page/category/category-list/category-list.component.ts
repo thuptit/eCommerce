@@ -13,8 +13,9 @@ export class CategoryListComponent {
   displayedColumns: string[] = ['id', 'name', 'description'];
   dataSource = new MatTableDataSource<CategoryModel>();
   totalCount: number = 0;
+  searchText: string = '';
   @ViewChild(MatPaginator) paginator = {} as MatPaginator;
-  gridParam = { pageIndex: 0, pageSize: 10 } as CategoryGridParam;
+  gridParam = { pageIndex: 0, pageSize: 10, searchText: '' } as CategoryGridParam;
   constructor(private _categoryService: CategoryService) {
   }
 
@@ -39,6 +40,10 @@ export class CategoryListComponent {
   onChangePage(event: PageEvent) {
     this.gridParam.pageIndex = event.pageIndex;
     this.gridParam.pageSize = event.pageSize;
+    this.getAllPaging();
+  }
+  onSearch() {
+    this.gridParam.searchText = this.searchText;
     this.getAllPaging();
   }
 }

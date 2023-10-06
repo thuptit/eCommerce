@@ -66,7 +66,6 @@ public static class QueryExtensions
         Expression orCondition = null;
         foreach (var filter in filters)
         {
-            var property = Expression.PropertyOrField(parameter, filter.PropertyName);
             var conditionExpression = Expression.Call(
                 Expression.PropertyOrField(parameter, filter.PropertyName),
                 ExpressionRetriver.containsMethod,

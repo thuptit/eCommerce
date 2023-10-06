@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthGuard } from "src/core/guards/auth.guard";
@@ -36,7 +36,8 @@ import { NbColumnsService, NbIconModule, NbInputModule, NbLayoutModule, NbMenuMo
         MatTableModule,
         MatCardModule,
         NbIconModule,
-        NbInputModule
+        NbInputModule,
+        FormsModule
     ],
     exports: [
         MatFormFieldModule,
@@ -55,7 +56,8 @@ import { NbColumnsService, NbIconModule, NbInputModule, NbLayoutModule, NbMenuMo
         MatTableModule,
         MatCardModule,
         NbIconModule,
-        NbInputModule
+        NbInputModule,
+        FormsModule
     ],
     providers: [
         AuthGuard,
