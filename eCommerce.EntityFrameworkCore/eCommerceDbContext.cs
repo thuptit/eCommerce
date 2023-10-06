@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.EntityFrameworkCore.Intercepters;
+using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Shared.Cores.Sessions;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace eCommerce.EntityFrameworkCore;
 
-public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IEcommerceDbContext
+public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
 {
     #region custom implementation
     //protected 

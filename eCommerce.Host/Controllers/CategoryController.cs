@@ -22,21 +22,18 @@ namespace eCommerce.Host.Controllers
         {
             _mediator = mediator;
         }
-        // GET: api/Category
         [HttpGet]
         public async Task<IEnumerable<CategoryDto>> Get()
         {
             return await _mediator.Send(new GetAllCategoryQuery());
         }
 
-        // GET: api/Category/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public async Task<string> Get(int id)
         {
             return "value";
         }
 
-        // POST: api/Category
         [HttpPost]
         [Authorize("admin")]
         public async Task<bool> Post([FromBody] CreateCategoryCommand request)
