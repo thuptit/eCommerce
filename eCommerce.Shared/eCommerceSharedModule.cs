@@ -2,6 +2,7 @@
 using eCommerce.Shared.Cores.Sessions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using Volo.Abp.Modularity;
 
 namespace eCommerce.Shared;
@@ -27,6 +28,15 @@ public class eCommerceSharedModule : AbpModule
                 policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
                 policy.RequireClaim("Role", eCommerceConsts.RoleStaff);
             });
+        });
+        context.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.ConfigurationOptions = new ConfigurationOptions()
+            {
+                User = "",
+                Password = "",
+                ClientName = ""
+            };
         });
     }
 }
