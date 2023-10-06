@@ -4,7 +4,6 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpResponse,
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, catchError, map } from 'rxjs';
@@ -23,9 +22,13 @@ export class TransformResponseInterceptor implements HttpInterceptor {
       if (error.status === 500) {
         this._logger.error(error.error?.ErrorMessage);
       }
-      if (error.status === 401 || error.status === 403) {
+      if (error.status === 401) {
         this._logger.error(error.error?.ErrorMessage);
         this._router.navigate(['/login']);
+      }
+      if (error.status === 403) {
+        this._logger.error(error.error?.ErrorMessage);
+        this._router.navigate(['/']);
       }
       throw (error);
     }));
