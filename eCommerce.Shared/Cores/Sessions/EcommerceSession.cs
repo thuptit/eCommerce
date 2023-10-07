@@ -14,7 +14,7 @@ public class EcommerceSession : IEcommerceSession
     {
         get
         {
-            var id =_httpContextAccessor.HttpContext.User.Claims
+            var id =_httpContextAccessor.HttpContext?.User.Claims
                 .Where(x => x.Type == "Id")
                 .Select(x => x.Value)
                 .FirstOrDefault();
