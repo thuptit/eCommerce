@@ -10,6 +10,8 @@ public class Product : EntityBase<long>
     
     #region Relationship
     public long CategoryId { get; set; }
-    public virtual Category Categories { get; set; }
+    public virtual Category Category { get; set; }
+    public virtual ICollection<ProductDiscount> ProductDiscounts { get; set; }
+    public virtual ProductInventory ProductInventory { get; set; }
     #endregion
 }
