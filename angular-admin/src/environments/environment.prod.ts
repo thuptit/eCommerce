@@ -1,4 +1,5 @@
 export const enviroment = {
     production: true,
-    apiUrl: ''
+    apiUrl: '',
+    clientId: '',
 }
