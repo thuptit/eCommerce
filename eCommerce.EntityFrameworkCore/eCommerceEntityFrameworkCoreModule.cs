@@ -17,7 +17,7 @@ public class eCommerceEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var configuration = LocalConfigurationExtentions.GetConfigurationBuilder();;
+        var configuration = LocalConfigurationExtentions.GetConfigurationBuilder();
         context.Services.AddDbContext<eCommerceDbContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("Default"));

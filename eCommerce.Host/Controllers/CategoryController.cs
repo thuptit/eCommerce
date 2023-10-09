@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using eCommerce.Shared;
 using eCommerce.Shared.Commands.Categories;
@@ -10,6 +11,7 @@ using eCommerce.Shared.Queries.Categories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace eCommerce.Host.Controllers
 {
@@ -18,9 +20,11 @@ namespace eCommerce.Host.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public CategoryController(IMediator mediator)
+        private readonly IDistributedCache _cache;
+        public CategoryController(IMediator mediator, IDistributedCache cache)
         {
             _mediator = mediator;
+            _cache = cache;
         }
         [HttpGet]
         public async Task<IEnumerable<CategoryDto>> Get()
@@ -57,6 +61,17 @@ namespace eCommerce.Host.Controllers
         public async Task<PagingBase<CategoryDto>> GetAllPaging([FromBody]GetAllPagingQuery query)
         {
             return await _mediator.Send(query);
+        }
+
+        [HttpPost("redis-cache")]
+        public async Task AddCache()
+        {
+            _cache.Set("category",Encoding.UTF8.GetBytes("Hello"));
+        }
+        [HttpGet("redis-cache")]
+        public async Task<string> GetCachce()
+        {
+            return Encoding.UTF8.GetString(await _cache.GetAsync("category"));
         }
     }
 }
