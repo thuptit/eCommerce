@@ -20,3 +20,6 @@
 - open angular-admin project
 - then run npm i --force
 - run ng serve to run web
+
+# Database design 
+![Alt text](eCommerceDatabase.jpg)
