@@ -8,6 +8,8 @@ using eCommerce.EntityFrameworkCore.Intercepters;
 using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Shared.Cores.Sessions;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace eCommerce.EntityFrameworkCore;
 
@@ -21,38 +23,34 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
         return base.SaveChanges();
     }
 
-    public void ApplyAudits()
+    private void ApplyAudits()
     {
         ChangeTracker.DetectChanges();
         foreach (var entry in ChangeTracker.Entries())
         {
-            var entity = entry.Entity as IEntity; 
-            if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged || entity is null)
+            var entity = (IEntity?)entry.Entity; 
+            if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged || entity == null)
                 continue;
-
-            if (entity is not null)
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entity.CreationTime = DateTime.Now;
-                        entity.CreatorId = _session.UserId;
-                        break;
-                    case EntityState.Modified:
-                        if (entity.IsDeleted)
-                        {
-                            entity.DeletionTime = DateTime.Now;
-                            entity.DeletorId = _session.UserId;
-                        }
-                        else
-                        {
-                            entity.ModificationTime = DateTime.Now;
-                            entity.ModifiorId = _session.UserId;
-                        }
-                        break;
-                }
-            }
             
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entity.CreationTime = DateTime.Now;
+                    entity.CreatorId = _session.UserId;
+                    break;
+                case EntityState.Modified:
+                    if (entity.IsDeleted)
+                    {
+                        entity.DeletionTime = DateTime.Now;
+                        entity.DeletorId = _session.UserId;
+                    }
+                    else
+                    {
+                        entity.ModificationTime = DateTime.Now;
+                        entity.ModifiorId = _session.UserId;
+                    }
+                    break;
+            }
         }
     }
 
@@ -83,12 +81,14 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
     private IDbContextTransaction _currentTransaction;
     private IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
     private readonly IEcommerceSession _session;
-
+    private readonly ILogger<eCommerceDbContext> _logger;
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        if (_currentTransaction != null) 
-            return null;
-
+        if (_currentTransaction != null)
+        {
+            throw new Exception("Not initiate new transaction when DbContext is existing other transaction. " +
+                                "Please commit transaction before create new transaction");
+        }
         _currentTransaction = await Database.BeginTransactionAsync();
         return _currentTransaction;
     }
@@ -104,6 +104,7 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
         }
         catch (Exception ex)
         {
+            _logger.LogException(ex);
             await RollbackAsync();
             
             async Task RollbackAsync()
@@ -114,7 +115,7 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
                 }
                 catch (Exception ex)
                 {
-                    //TODO: tracer exception
+                    _logger.LogException(ex);
                 }
                 
             }
@@ -134,5 +135,7 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
     public eCommerceDbContext(DbContextOptions options, IEcommerceSession session) : base(options)
     {
         _session = session;
+        _logger = NullLogger<eCommerceDbContext>.Instance;
+        ;
     }
 }
