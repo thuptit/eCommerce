@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { AuthenticateModel } from '../models/authenticate.model';
 import { UserAuth } from '../models/user-auth.model';
 
 @Injectable({
@@ -23,5 +22,9 @@ export class TokenAuthService {
   }
   getToken(): string {
     return this._cookies.get('token');
+  }
+  removeAuthToken() {
+    this._cookies.delete('token', '/');
+    this._cookies.delete('userInfo', '/');
   }
 }
