@@ -7,7 +7,7 @@ public class OrderItem : EntityBase<long>
 {
     public long ProductId { get; set; }
     [ForeignKey(nameof(ProductId))]
-    public Product Product { get; set; }
+    public virtual Product Product { get; set; }
     public int Quantity { get; set; }
     public string ProductName { get; set; }
     public string ProductDescription { get; set; }
