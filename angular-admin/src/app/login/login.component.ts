@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserAuth } from 'src/core/models/user-auth.model';
 import { AuthenticationService } from 'src/core/services/authentication.service';
-import { LoggerService } from 'src/core/services/logger.service';
 import { TokenAuthService } from 'src/core/services/token-auth.service';
 import {
   SocialAuthService,
@@ -11,6 +10,8 @@ import {
 } from '@abacritt/angularx-social-login';
 import { ResponseApi } from 'src/core/models/response.model';
 import { AuthenticateModel } from 'src/core/models/authenticate.model';
+import { flatMap, of } from 'rxjs';
+import { UnsubscriberServiceService } from 'src/core/services/unsubscriber-service.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -27,24 +28,13 @@ export class LoginComponent {
   constructor(private _authenticationService: AuthenticationService,
     private _router: Router,
     private _tokenAuth: TokenAuthService,
-    private _logger: LoggerService,
-    private socialAuthService: SocialAuthService
+    private socialAuthService: SocialAuthService,
+    private _unsubscribeService: UnsubscriberServiceService
   ) {
   }
 
   ngOnInit() {
-    this.socialAuthService.authState.subscribe((user) => {
-      this.socialUser = user;
-      this.isLoggedin = user != null;
-      if(user){
-        this._authenticationService.loginWithGG(user.idToken).subscribe((response) => {
-          if (!response.Success) {
-            return;
-          }
-          this.handleLoginSuccess(response);
-        })
-      }
-    });
+    this.loginGoogle();
   }
 
   public login() {
@@ -54,12 +44,33 @@ export class LoginComponent {
     this._authenticationService.login(
       this.loginForm.controls['username'].value,
       this.loginForm.controls['password'].value
-    ).subscribe((response) => {
-      if (!response.Success) {
-        return;
-      }
-      this.handleLoginSuccess(response);
-    })
+    )
+      .pipe(this._unsubscribeService.takeUntilDestroy)
+      .subscribe((response) => {
+        if (!response.Success) {
+          return;
+        }
+        this.handleLoginSuccess(response);
+      })
+  }
+  public loginGoogle() {
+    this.socialAuthService.authState
+      .pipe(
+        flatMap((user) => {
+          this.socialUser = user;
+          this.isLoggedin = user != null;
+          if (!user)
+            return of({ Success: false, StatusCode: 500, ErrorMessages: 'Login failed' } as ResponseApi<any>);
+          return this._authenticationService.loginWithGG(user.idToken);
+        }),
+        this._unsubscribeService.takeUntilDestroy
+      )
+      .subscribe((response) => {
+        if (!response.Success) {
+          return;
+        }
+        this.handleLoginSuccess(response);
+      });
   }
   public checkError = (controlName: string, errorName: string) => {
     return this.loginForm.controls[controlName].hasError(errorName);

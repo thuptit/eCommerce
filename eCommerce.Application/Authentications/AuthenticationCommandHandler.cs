@@ -74,16 +74,17 @@ public class AuthenticationCommandHandler
     {
         var handler = new JwtSecurityTokenHandler();
 
-        var token = handler.ReadJwtToken(request.idToken)?.Claims;
-
-        if (token != null)
+        var tokenClaims = handler.ReadJwtToken(request.idToken).Claims;
+        var idTokenExpireValue = tokenClaims.FirstOrDefault(x => x.Type == "exp").Value;
+        var timeExpireIdToken = long.Parse(idTokenExpireValue);
+        long currentDateTimeSeconds = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+        if (tokenClaims != null && (timeExpireIdToken - currentDateTimeSeconds > 0))
         {
-            var userEmail = token.FirstOrDefault(c => c.Type == "email")?.Value;
+            var userEmail = tokenClaims.FirstOrDefault(c => c.Type == "email")?.Value;
             var user = await _userDomain.FindByEmailAsync(userEmail);
             var roles = await _userDomain.GetRolesAsync(user);
             return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles);
         }
-
         return new LoginFail();
     }
 
