@@ -14,7 +14,7 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
-import { NbColumnsService, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
+import { NbActionsModule, NbColumnsService, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
 
 @NgModule({
     declarations: [
@@ -38,6 +38,7 @@ import { NbColumnsService, NbContextMenuModule, NbIconModule, NbInputModule, NbL
         NbIconModule,
         NbInputModule,
         NbContextMenuModule,
+        NbActionsModule,
         FormsModule
     ],
     exports: [
@@ -59,6 +60,7 @@ import { NbColumnsService, NbContextMenuModule, NbIconModule, NbInputModule, NbL
         NbIconModule,
         NbInputModule,
         NbContextMenuModule,
+        NbActionsModule,
         FormsModule
     ],
     providers: [
