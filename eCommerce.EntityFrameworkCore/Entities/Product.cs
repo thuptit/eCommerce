@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using eCommerce.EntityFrameworkCore.Audits;
 
 namespace eCommerce.EntityFrameworkCore.Entities;
@@ -10,6 +11,7 @@ public class Product : EntityBase<long>
     
     #region Relationship
     public long CategoryId { get; set; }
+    [ForeignKey(nameof(CategoryId))]
     public virtual Category Category { get; set; }
     public virtual ICollection<ProductDiscount> ProductDiscounts { get; set; }
     public virtual ProductInventory ProductInventory { get; set; }

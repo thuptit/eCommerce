@@ -7,6 +7,7 @@ using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.EntityFrameworkCore.Intercepters;
 using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Shared.Cores.Sessions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,45 +16,42 @@ namespace eCommerce.EntityFrameworkCore;
 
 public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
 {
-    #region custom implementation
-    //protected 
-    public override int SaveChanges()
+    #region Tables
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<PaymentDetail> PaymentDetails { get; set; }
+    public DbSet<ProductDiscount> ProductDiscounts { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<ProductInventory> ProductInventories { get; set; }
+    public DbSet<UserPayment> UserPayments { get; set; }
+    #endregion
+    
+    private IDbContextTransaction _currentTransaction;
+    private IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
+    private readonly IEcommerceSession _session;
+    private readonly ILogger<eCommerceDbContext> _logger;
+    public eCommerceDbContext(DbContextOptions options, IEcommerceSession session) : base(options)
     {
-        ApplyAudits();
-        return base.SaveChanges();
+        _session = session;
+        _logger = NullLogger<eCommerceDbContext>.Instance;
+        ;
     }
 
-    private void ApplyAudits()
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        ChangeTracker.DetectChanges();
-        foreach (var entry in ChangeTracker.Entries())
-        {
-            var entity = (IEntity?)entry.Entity; 
-            if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged || entity == null)
-                continue;
-            
-            switch (entry.State)
+        optionsBuilder
+            .UseLazyLoadingProxies()
+            .AddInterceptors(new List<IInterceptor>()
             {
-                case EntityState.Added:
-                    entity.CreationTime = DateTime.Now;
-                    entity.CreatorId = _session.UserId;
-                    break;
-                case EntityState.Modified:
-                    if (entity.IsDeleted)
-                    {
-                        entity.DeletionTime = DateTime.Now;
-                        entity.DeletorId = _session.UserId;
-                    }
-                    else
-                    {
-                        entity.ModificationTime = DateTime.Now;
-                        entity.ModifiorId = _session.UserId;
-                    }
-                    break;
-            }
-        }
+                new eCommerceSaveChangesIntercetor(_session?.UserId)
+            });
+        base.OnConfiguring(optionsBuilder);
     }
 
+    #region custom implementation
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -65,23 +63,7 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
             }
         }
     }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-    {
-        ApplyAudits();
-        return base.SaveChangesAsync(cancellationToken);
-    }
-
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
-    {
-        ApplyAudits();
-        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-    }
-
-    private IDbContextTransaction _currentTransaction;
-    private IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
-    private readonly IEcommerceSession _session;
-    private readonly ILogger<eCommerceDbContext> _logger;
+    
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
         if (_currentTransaction != null)
@@ -130,12 +112,4 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
         }
     }
     #endregion
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<Product> Products { get; set; }
-    public eCommerceDbContext(DbContextOptions options, IEcommerceSession session) : base(options)
-    {
-        _session = session;
-        _logger = NullLogger<eCommerceDbContext>.Instance;
-        ;
-    }
 }
