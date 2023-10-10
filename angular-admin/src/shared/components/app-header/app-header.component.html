@@ -1,0 +1,54 @@
+<div class="header-container">
+  <nb-actions size="medium">
+    <nb-action style="padding-left: 0 !important">
+      <nb-icon
+        icon="menu-2-outline"
+        style="cursor: pointer"
+        (click)="collapse()"
+      ></nb-icon>
+    </nb-action>
+    <nb-action>
+      <h6 class="mb-0">eCommerce Management</h6>
+    </nb-action>
+  </nb-actions>
+</div>
+<div class="header-container">
+  <nb-actions size="medium">
+    <nb-action icon="search-outline" badgeText="99+" badgeStatus="warning">
+    </nb-action>
+    <nb-action
+      icon="bell-outline"
+      badgeText="12"
+      badgePosition="top right"
+      badgeStatus="danger"
+    >
+    </nb-action>
+    <nb-action>
+      <nb-select
+        [(selected)]="selectedTheme"
+        matripple
+        status="basic"
+        type="button"
+        (selectedChange)="changeTheme()"
+      >
+        <nb-option value="default">Light</nb-option>
+        <nb-option value="dark">Dark</nb-option>
+        <nb-option value="cosmic">Cosmic</nb-option>
+        <nb-option value="corporate">Corporate</nb-option>
+        <!-- <nb-option value="material-light">Material Light</nb-option>
+        <nb-option value="material-dark">Material Dark</nb-option> -->
+      </nb-select>
+    </nb-action>
+    <nb-action badgePosition="top right">
+      <nb-user
+        size="large"
+        [name]="userInfo.userName"
+        [title]="userInfo.roles[0]"
+        color="#cccccc"
+        [nbContextMenu]="items"
+        nbContextMenuTag="menu-context-user-tag"
+      >
+      </nb-user>
+    </nb-action>
+  </nb-actions>
+</div>

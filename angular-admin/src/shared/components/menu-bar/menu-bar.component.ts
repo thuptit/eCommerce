@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NbMenuItem } from '@nebular/theme';
 
 @Component({
@@ -12,7 +13,6 @@ export class MenuBarComponent {
       title: 'Home',
       link: 'home',
       icon: 'home',
-      selected: true
     },
     {
       title: 'Category',
@@ -29,5 +29,18 @@ export class MenuBarComponent {
       link: 'users',
       icon: 'people'
     }
-  ]
+  ];
+  constructor(private _router: Router) {
+  }
+  ngOnInit() {
+    this.getSelectedItem();
+  }
+
+  private getSelectedItem() {
+    this.menuItems.forEach(element => {
+      if (this._router.url.startsWith('/eCommerce/' + element.link)) {
+        element.selected = true;
+      }
+    })
+  }
 }

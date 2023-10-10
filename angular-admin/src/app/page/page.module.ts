@@ -16,8 +16,7 @@ import { NbThemeService, NbUserModule } from '@nebular/theme';
   imports: [
     CommonModule,
     PageRoutingModule,
-    SharedModule,
-    NbUserModule
+    SharedModule
   ],
   providers: []
 })

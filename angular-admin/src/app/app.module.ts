@@ -29,7 +29,7 @@ const clientId = environment.clientId;
     SharedModule,
     BrowserAnimationsModule,
     NgbModule,
-    NbThemeModule.forRoot(),
+    NbThemeModule.forRoot({ name: 'light' }),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     SocialLoginModule,
