@@ -21,5 +21,12 @@
 - then run npm i --force
 - run ng serve to run web
 
-# Database design 
+# Database design
+
 ![Alt text](eCommerceDatabase.jpg)
+
+# UI - Angular
+
+- Base on Nebular theme (https://akveo.github.io/nebular/docs/components/components-overview)
+- Boostrap 5
+- Material UI
