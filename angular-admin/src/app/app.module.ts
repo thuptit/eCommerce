@@ -7,8 +7,17 @@ import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from 'src/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NbMenuModule, NbSidebarModule, NbThemeModule } from '@nebular/theme';
+import { NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+  GoogleLoginProvider,
+  GoogleSigninButtonDirective,
+  GoogleSigninButtonModule,
+} from '@abacritt/angularx-social-login';
+import { environment } from 'src/environments/environment';
 
+const clientId = environment.clientId;
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,9 +31,25 @@ import { NbMenuModule, NbSidebarModule, NbThemeModule } from '@nebular/theme';
     NgbModule,
     NbThemeModule.forRoot({ name: 'light' }),
     NbSidebarModule.forRoot(),
-    NbMenuModule.forRoot()
+    NbMenuModule.forRoot(),
+    SocialLoginModule,
+    GoogleSigninButtonModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(clientId),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    },
+    GoogleSigninButtonDirective
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

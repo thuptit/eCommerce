@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Dynamic.Core.Tokenizer;
 using System.Security.Claims;
 using System.Text;
 using eCommerce.Domain.Domains;
@@ -16,6 +17,7 @@ namespace eCommerce.Application.Authentications;
 public class AuthenticationCommandHandler 
     : IRequestHandler<RegisterAccountCommand,bool>,
         IRequestHandler<LoginAdminSiteCommand,LoginDto>,
+        IRequestHandler<LoginAdminSiteWithGoogleCommand, LoginDto>,
         IRequestHandler<TokenGenerationCommand,string>
 {
     private readonly UserDomain _userDomain;
@@ -65,6 +67,24 @@ public class AuthenticationCommandHandler
             return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles);
         }
 
+        return new LoginFail();
+    }
+
+    public async Task<LoginDto> Handle(LoginAdminSiteWithGoogleCommand request, CancellationToken cancellationToken)
+    {
+        var handler = new JwtSecurityTokenHandler();
+
+        var tokenClaims = handler.ReadJwtToken(request.idToken).Claims;
+        var idTokenExpireValue = tokenClaims.FirstOrDefault(x => x.Type == "exp").Value;
+        var timeExpireIdToken = long.Parse(idTokenExpireValue);
+        long currentDateTimeSeconds = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+        if (tokenClaims != null && (timeExpireIdToken - currentDateTimeSeconds > 0))
+        {
+            var userEmail = tokenClaims.FirstOrDefault(c => c.Type == "email")?.Value;
+            var user = await _userDomain.FindByEmailAsync(userEmail);
+            var roles = await _userDomain.GetRolesAsync(user);
+            return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles);
+        }
         return new LoginFail();
     }
 
