@@ -14,11 +14,13 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
-import { NbActionsModule, NbColumnsService, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
+import { NbActionsModule, NbColumnsService, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSelectModule, NbSidebarModule, NbThemeModule, NbThemeService, NbUserModule } from '@nebular/theme';
+import { AppHeaderComponent } from './components/app-header/app-header.component';
 
 @NgModule({
     declarations: [
-        MenuBarComponent
+        MenuBarComponent,
+        AppHeaderComponent
     ],
     imports: [
         MatFormFieldModule,
@@ -39,7 +41,9 @@ import { NbActionsModule, NbColumnsService, NbContextMenuModule, NbIconModule, N
         NbInputModule,
         NbContextMenuModule,
         NbActionsModule,
-        FormsModule
+        NbSelectModule,
+        FormsModule,
+        NbUserModule
     ],
     exports: [
         MatFormFieldModule,
@@ -49,6 +53,7 @@ import { NbActionsModule, NbColumnsService, NbContextMenuModule, NbIconModule, N
         HttpClientModule,
         ToastrModule,
         MenuBarComponent,
+        AppHeaderComponent,
         NbMenuModule,
         NbSidebarModule,
         NbThemeModule,
@@ -61,7 +66,9 @@ import { NbActionsModule, NbColumnsService, NbContextMenuModule, NbIconModule, N
         NbInputModule,
         NbContextMenuModule,
         NbActionsModule,
-        FormsModule
+        NbSelectModule,
+        FormsModule,
+        NbUserModule
     ],
     providers: [
         AuthGuard,
