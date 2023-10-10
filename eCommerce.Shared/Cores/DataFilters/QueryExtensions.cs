@@ -71,14 +71,9 @@ public static class QueryExtensions
                 ExpressionRetriver.containsMethod,
                 Expression.Constant(searchTerm)
             );
-            if (orCondition == null)
-            {
-                orCondition = conditionExpression;
-            }
-            else
-            {
-                orCondition = Expression.OrElse(orCondition, conditionExpression);
-            }
+            orCondition = orCondition == null
+                ? conditionExpression
+                : Expression.OrElse(orCondition, conditionExpression);
         }
 
         return Expression.Lambda<Func<T, bool>>(orCondition, parameter);

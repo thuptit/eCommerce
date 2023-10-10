@@ -13,13 +13,8 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     private readonly DbSet<TEntity> _dbSet;
     private readonly eCommerceDbContext _context;
 
-    public IUnitOfWork CurrentUnitOfWork
-    {
-        get
-        {
-            return _context;
-        }
-    }
+    public IUnitOfWork CurrentUnitOfWork => _context;
+    
     public Repository(eCommerceDbContext context)
     {
         _context = context;
@@ -126,14 +121,14 @@ public class Repository<TEntity,TPrimaryKey> : IRepository<TEntity,TPrimaryKey>
     public TPrimaryKey InsertAndGetId(TEntity entity)
     {
         var newEntity = _dbSet.Add(entity);
-        _context.SaveChanges();
+        CurrentUnitOfWork.SaveChanges();
         return newEntity.Entity.Id;
     }
 
     public async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
     {
         var newEntity = await _dbSet.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await CurrentUnitOfWork.SaveChangesAsync();
         return newEntity.Entity.Id;
     }
 

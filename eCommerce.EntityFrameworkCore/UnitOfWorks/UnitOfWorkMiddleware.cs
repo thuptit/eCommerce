@@ -17,11 +17,11 @@ public class UnitOfWorkMiddleware : IMiddleware
     {
         if (IsTransactional(context))
         {
-            _logger.LogInformation("Start Transaction");
+            _logger.LogInformation("Initial Transaction");
             await _context.BeginTransactionAsync();
             await next(context);
             await _context.CommitAsync();
-            _logger.LogInformation("End Transaction");
+            _logger.LogInformation("Completed Transaction");
         }
         else
         {
@@ -32,7 +32,6 @@ public class UnitOfWorkMiddleware : IMiddleware
     private bool IsTransactional(HttpContext context)
     {
         var endPoint = context.GetEndpoint();
-
         var transactionAttribute = endPoint.Metadata.GetMetadata<UnitOfWorkAttribute>();
         if (transactionAttribute != null && transactionAttribute.isTransactional)
         {

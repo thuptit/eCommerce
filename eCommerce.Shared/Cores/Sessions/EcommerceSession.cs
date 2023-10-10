@@ -28,7 +28,7 @@ public class EcommerceSession : IEcommerceSession
     }
 
 
-    public string RoleName => _httpContextAccessor.HttpContext.User.Claims
+    public string? RoleName => _httpContextAccessor.HttpContext?.User.Claims
         .Where(x => x.Type == "Role")
         .Select(x => x.Value)
         .FirstOrDefault();
