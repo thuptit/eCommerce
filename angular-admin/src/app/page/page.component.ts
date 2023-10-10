@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserAuth } from 'src/core/models/user-auth.model';
-import { TokenAuthService } from 'src/core/services/token-auth.service';
+import { NbMenuService } from '@nebular/theme';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-page',
@@ -8,14 +8,28 @@ import { TokenAuthService } from 'src/core/services/token-auth.service';
   styleUrls: ['./page.component.scss']
 })
 export class PageComponent implements OnInit {
-  userInfo = {} as UserAuth;
-  constructor(private tokenAuth: TokenAuthService) {
+  constructor(
+    private menuService: NbMenuService) {
   }
   ngOnInit(): void {
-    this.getUserInfo();
+    this.menuService.onItemClick()
+      .pipe(
+        filter((event) => event.tag === 'menu-side-bar')
+      )
+      .subscribe(event => {
+        this.deselected();
+        event.item.selected = true;
+        return event;
+      });
   }
 
-  getUserInfo() {
-    this.userInfo = this.tokenAuth.getUser();
+  private deselected() {
+    this.menuService.getSelectedItem()
+      .pipe(
+        filter((event) => event.tag === 'menu-side-bar')
+      )
+      .subscribe(event => {
+        event.item.selected = false;
+      })
   }
 }

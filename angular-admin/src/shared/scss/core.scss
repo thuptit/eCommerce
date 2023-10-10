@@ -1,3 +1,22 @@
-.width-fit-content{
-    width: fit-content !important;
+// import Nebular Theme System and the default theme
+@forward "@nebular/theme/styles/theming";
+@use "@nebular/theme/styles/theming" as *;
+@use "@nebular/theme/styles/themes/default";
+@use "@nebular/theme/styles/themes/dark";
+@use "@nebular/theme/styles/themes/cosmic";
+@use "@nebular/theme/styles/themes/corporate";
+$nb-themes: nb-register-theme((), aquamarine, dark);
+$nb-themes: nb-register-theme((), aquamarine, cosmic);
+$nb-themes: nb-register-theme((), aquamarine, corporate);
+.width-fit-content {
+  width: fit-content !important;
+}
+nb-select .select-button {
+  min-width: 6rem !important;
+}
+.nb-theme-default .cdk-overlay-container,
+.nb-theme-dark .cdk-overlay-container,
+.nb-theme-cosmic .cdk-overlay-container,
+.nb-theme-corporate .cdk-overlay-container {
+  z-index: 1040;
 }

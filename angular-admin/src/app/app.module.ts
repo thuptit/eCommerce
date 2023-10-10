@@ -7,7 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from 'src/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
+import { NbMenuModule, NbSidebarModule, NbThemeModule } from '@nebular/theme';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@n
     SharedModule,
     BrowserAnimationsModule,
     NgbModule,
-    NbThemeModule.forRoot(),
+    NbThemeModule.forRoot({ name: 'light' }),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot()
   ],
