@@ -4,7 +4,7 @@ using MediatR;
 
 namespace eCommerce.Application.Categories;
 
-public class CategoryCommandHandler : IRequestHandler<CreateCategoryCommand,bool>
+public class CategoryCommandHandler : IRequestHandler<CreateCategoryCommand,string>
 {
     private readonly CategoryDomain _categoryDomain;
 
@@ -12,9 +12,9 @@ public class CategoryCommandHandler : IRequestHandler<CreateCategoryCommand,bool
     {
         _categoryDomain = categoryDomain;
     }
-    public async Task<bool> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         await _categoryDomain.Create(request);
-        return true;
+        return "Created Successfully";
     }
 }
