@@ -7,3 +7,8 @@ export interface CategoryModel {
 }
 export interface CategoryGridParam extends GridParam {
 }
+
+export interface CategoryDataDialog {
+    title: string;
+    model: CategoryModel;
+}
