@@ -6,6 +6,7 @@ import { CategoryDataDialog, CategoryGridParam, CategoryModel } from 'src/core/m
 import { CategoryService } from 'src/core/services/category.service';
 import { CreateOrUpdateCategoryComponent } from '../create-or-update-category/create-or-update-category.component';
 import { ComponentBase } from 'src/shared/component-base.component';
+import { DialogResultModel } from 'src/core/models/dialog-result.model';
 
 @Component({
   selector: 'app-category-list',
@@ -61,7 +62,9 @@ export class CategoryListComponent extends ComponentBase {
         model: { name: '', description: '' }
       } as CategoryDataDialog
     });
-    modalCreate.afterClosed().subscribe(result => {
+    modalCreate.afterClosed().subscribe((result: DialogResultModel<string>) => {
+      if (!result.isSuccess) return;
+      this.getAllPaging();
     });
   }
 }

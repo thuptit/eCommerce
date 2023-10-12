@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, of, startWith } from 'rxjs';
 import { PagingModel, ResponseApi } from '../models/response.model';
 import { CategoryGridParam, CategoryModel } from '../models/category.model';
 
@@ -17,5 +17,14 @@ export class CategoryService extends BaseService {
 
   getAllPaging(gridParam: CategoryGridParam): Observable<ResponseApi<PagingModel<CategoryModel>>> {
     return this.httpClient.post<any>(this.rootUrl + "/GetAllPaging", gridParam);
+  }
+  create(model: CategoryModel): Observable<ResponseApi<string>> {
+    return this.httpClient.post<any>(this.rootUrl, model)
+      .pipe(
+        startWith({ isLoading: true, Success: false } as ResponseApi<string>),
+        catchError(error => {
+          return of({ isLoading: false, Success: false } as ResponseApi<string>)
+        })
+      );
   }
 }

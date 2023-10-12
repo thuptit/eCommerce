@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <h1 mat-dialog-title style="font-size: x-larger">
     <b>{{ this.data.title }}</b>
   </h1>
@@ -26,7 +26,12 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>{{ GlobalString.CLOSE }}</button>
-    <button mat-button class="bg-success text-white">
+    <button
+      mat-button
+      class="bg-success text-white"
+      [disabled]="isSaving"
+      type="submit"
+    >
       {{ GlobalString.SAVE }}
     </button>
   </mat-dialog-actions>

@@ -3,6 +3,7 @@ export interface ResponseApi<T> {
     Success: boolean;
     Result?: T;
     ErrorMessages: string;
+    isLoading: boolean;
 }
 export interface PagingModel<T> {
     totalCount: number;
