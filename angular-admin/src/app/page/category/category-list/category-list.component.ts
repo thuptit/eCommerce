@@ -18,6 +18,7 @@ export class CategoryListComponent extends ComponentBase {
   dataSource = new MatTableDataSource<CategoryModel>();
   totalCount: number = 0;
   searchText: string = '';
+  isLoading: boolean = false;
   @ViewChild(MatPaginator) paginator = {} as MatPaginator;
   gridParam = { pageIndex: 0, pageSize: 10, searchText: '' } as CategoryGridParam;
   constructor(private _categoryService: CategoryService, public dialog: MatDialog) {
@@ -30,7 +31,8 @@ export class CategoryListComponent extends ComponentBase {
 
   getAllPaging() {
     this._categoryService.getAllPaging(this.gridParam).subscribe(response => {
-      if (!response.Success) return;
+      this.isLoading = response.isLoading;
+      if (!response.Success && response.isLoading) return;
       this.dataSource.data = (response.Result?.items ?? []);
       this.totalCount = response.Result?.totalCount ?? 0;
       setTimeout(() => {
