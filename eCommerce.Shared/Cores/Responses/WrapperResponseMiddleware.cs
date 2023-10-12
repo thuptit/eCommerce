@@ -73,11 +73,11 @@ public class WrapperResponseMiddleware : IMiddleware
     {
         try
         {
-            return JsonSerializer.Deserialize<object>(json) ?? json;
+            return JsonSerializer.Deserialize<object>(json);
         }
         catch(Exception ex)
         {
-            _logger.LogException(ex);
+            //_logger.LogInformation(ex.Message);
             return json;
         }
     }

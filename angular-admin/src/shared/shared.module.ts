@@ -17,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NbActionsModule, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSelectModule, NbSidebarModule, NbThemeModule, NbThemeService, NbUserModule } from '@nebular/theme';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
     declarations: [
@@ -44,6 +45,7 @@ import { AppHeaderComponent } from './components/app-header/app-header.component
         NbActionsModule,
         NbSelectModule,
         MatDialogModule,
+        MatProgressSpinnerModule,
         FormsModule,
         NbUserModule
     ],
@@ -71,6 +73,7 @@ import { AppHeaderComponent } from './components/app-header/app-header.component
         NbSelectModule,
         FormsModule,
         MatDialogModule,
+        MatProgressSpinnerModule,
         NbUserModule
     ],
     providers: [

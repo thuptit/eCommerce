@@ -6,6 +6,7 @@ import { CategoryDataDialog, CategoryGridParam, CategoryModel } from 'src/core/m
 import { CategoryService } from 'src/core/services/category.service';
 import { CreateOrUpdateCategoryComponent } from '../create-or-update-category/create-or-update-category.component';
 import { ComponentBase } from 'src/shared/component-base.component';
+import { DialogResultModel } from 'src/core/models/dialog-result.model';
 
 @Component({
   selector: 'app-category-list',
@@ -17,6 +18,7 @@ export class CategoryListComponent extends ComponentBase {
   dataSource = new MatTableDataSource<CategoryModel>();
   totalCount: number = 0;
   searchText: string = '';
+  isLoading: boolean = false;
   @ViewChild(MatPaginator) paginator = {} as MatPaginator;
   gridParam = { pageIndex: 0, pageSize: 10, searchText: '' } as CategoryGridParam;
   constructor(private _categoryService: CategoryService, public dialog: MatDialog) {
@@ -29,7 +31,8 @@ export class CategoryListComponent extends ComponentBase {
 
   getAllPaging() {
     this._categoryService.getAllPaging(this.gridParam).subscribe(response => {
-      if (!response.Success) return;
+      this.isLoading = response.isLoading;
+      if (!response.Success && response.isLoading) return;
       this.dataSource.data = (response.Result?.items ?? []);
       this.totalCount = response.Result?.totalCount ?? 0;
       setTimeout(() => {
@@ -61,7 +64,9 @@ export class CategoryListComponent extends ComponentBase {
         model: { name: '', description: '' }
       } as CategoryDataDialog
     });
-    modalCreate.afterClosed().subscribe(result => {
+    modalCreate.afterClosed().subscribe((result: DialogResultModel<string>) => {
+      if (!result.isSuccess) return;
+      this.getAllPaging();
     });
   }
 }
