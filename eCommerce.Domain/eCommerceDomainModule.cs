@@ -14,7 +14,6 @@ public class eCommerceDomainModule : AbpModule
         context.Services.AddTransient(typeof(UserDomain));
         context.Services.AddTransient(typeof(SignInDomain));
         context.Services.AddTransient(typeof(RoleDomain));
-        context.Services.AddTransient(typeof(CategoryDomain));
         context.Services.AddTransient(typeof(IRepository<,>), typeof(Repository<,>));
     }
 }

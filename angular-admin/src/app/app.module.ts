@@ -16,6 +16,7 @@ import {
   GoogleSigninButtonModule,
 } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
+import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 const clientId = environment.clientId;
 @NgModule({
@@ -33,7 +34,8 @@ const clientId = environment.clientId;
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     SocialLoginModule,
-    GoogleSigninButtonModule
+    GoogleSigninButtonModule,
+    SweetAlert2Module.forRoot()
   ],
   providers: [
     {
@@ -48,6 +50,7 @@ const clientId = environment.clientId;
         ],
       } as SocialAuthServiceConfig,
     },
+    SweetAlert2LoaderService,
     GoogleSigninButtonDirective
   ],
   bootstrap: [AppComponent]

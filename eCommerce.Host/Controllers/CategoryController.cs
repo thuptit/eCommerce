@@ -51,8 +51,9 @@ namespace eCommerce.Host.Controllers
 
         // DELETE: api/Category/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<string> Delete(int id)
         {
+            return await _mediator.Send(new DeleteCategoryCommand(id));
         }
         // GET: api/Category/GetAllPaging
         [HttpPost("GetAllPaging")]

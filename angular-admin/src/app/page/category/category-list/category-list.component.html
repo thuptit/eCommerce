@@ -67,9 +67,26 @@
             <button mat-raised-button color="basic">
               <nb-icon icon="edit-outline"></nb-icon>
             </button>
-            <button mat-raised-button color="warn" class="ms-2">
+            <button
+              mat-raised-button
+              color="warn"
+              class="ms-2"
+              [swal]="deleteSwal"
+            >
               <nb-icon icon="trash-2-outline"></nb-icon>
             </button>
+            <swal
+              #deleteSwal
+              title="Delete {{ element.name }}?"
+              text="This cannot be undone"
+              icon="question"
+              [cancelButtonText]="GlobalString.CANCEL"
+              [confirmButtonText]="GlobalString.YES"
+              [showCancelButton]="true"
+              [focusCancel]="true"
+              (confirm)="onDelete(element.id)"
+            >
+            </swal>
           </td>
         </ng-container>
 
