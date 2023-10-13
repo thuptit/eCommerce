@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,7 +11,7 @@ import { DialogResultModel } from 'src/core/models/dialog-result.model';
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.scss']
+  styleUrls: ['./category-list.component.scss'],
 })
 export class CategoryListComponent extends ComponentBase {
   displayedColumns: string[] = ['id', 'name', 'description', 'action'];
@@ -21,7 +21,8 @@ export class CategoryListComponent extends ComponentBase {
   isLoading: boolean = false;
   @ViewChild(MatPaginator) paginator = {} as MatPaginator;
   gridParam = { pageIndex: 0, pageSize: 10, searchText: '' } as CategoryGridParam;
-  constructor(private _categoryService: CategoryService, public dialog: MatDialog) {
+  constructor(private _categoryService: CategoryService, public dialog: MatDialog
+  ) {
     super();
   }
 
@@ -68,5 +69,12 @@ export class CategoryListComponent extends ComponentBase {
       if (!result.isSuccess) return;
       this.getAllPaging();
     });
+  }
+  onDelete(id: number) {
+    this._categoryService.delete(id).subscribe(response => {
+      if (!response.Success)
+        return;
+      this.getAllPaging();
+    })
   }
 }

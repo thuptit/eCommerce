@@ -33,4 +33,7 @@ export class CategoryService extends BaseService {
         })
       );
   }
+  delete(id: number): Observable<ResponseApi<string>> {
+    return this.httpClient.delete<any>(this.rootUrl + `/${id}`);
+  }
 }

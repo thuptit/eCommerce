@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NbActionsModule, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSelectModule, NbSidebarModule, NbThemeModule, NbThemeService, NbUserModule } from '@nebular/theme';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         MatDialogModule,
         MatProgressSpinnerModule,
         FormsModule,
-        NbUserModule
+        NbUserModule,
+        SweetAlert2Module
     ],
     exports: [
         MatFormFieldModule,
@@ -74,7 +76,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         FormsModule,
         MatDialogModule,
         MatProgressSpinnerModule,
-        NbUserModule
+        NbUserModule,
+        SweetAlert2Module
     ],
     providers: [
         AuthGuard,
