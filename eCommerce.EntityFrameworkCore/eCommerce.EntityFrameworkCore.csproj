@@ -32,6 +32,21 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+
+
+
+
+
+
+
+
+
+    <ItemGroup>
+      <Folder Include="Cores\Enums\" />
+    </ItemGroup>
+
+
+
     </ItemGroup>
 
 

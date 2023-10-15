@@ -29,7 +29,7 @@ public class eCommerceEntityFrameworkCoreModule : AbpModule
             })
             .AddEntityFrameworkStores<eCommerceDbContext>()
             .AddDefaultTokenProviders();
-
+        context.Services.AddScoped<IUnitOfWork, eCommerceDbContext>();
         context.Services.AddHostedService<SeedDataService>();
         context.Services.AddScoped(typeof(UnitOfWorkMiddleware));
     }
