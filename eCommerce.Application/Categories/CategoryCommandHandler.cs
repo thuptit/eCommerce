@@ -10,12 +10,12 @@ using Microsoft.Extensions.Logging;
 
 namespace eCommerce.Application.Categories;
 
-public class CategoryCommandHandler : ApplicationServiceBase, IRequestHandler<CreateCategoryCommand,string>,
+public class CategoryCommandHandler : ApplicationServiceBase, 
+    IRequestHandler<CreateCategoryCommand,string>,
     IRequestHandler<DeleteCategoryCommand, string>
 {
     private readonly IRepository<Category, long> _repository;
     private readonly ILogger<CategoryCommandHandler> _logger;
-    public IUnitOfWork CurrentUnitOfWork { get; set; }
     public CategoryCommandHandler(IRepository<Category, long> repository, ILogger<CategoryCommandHandler> logger)
     {
         _repository = repository;
@@ -33,7 +33,7 @@ public class CategoryCommandHandler : ApplicationServiceBase, IRequestHandler<Cr
             Name = request.Name,
             Description = request.Description
         });
-        await _repository.CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork.SaveChangesAsync();
         return "Created Successfully";
     }
 
