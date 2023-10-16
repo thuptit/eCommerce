@@ -1,12 +1,20 @@
 using System.Reflection;
+using Castle.Windsor;
+using Castle.Windsor.MsDependencyInjection;
 using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Host;
+using eCommerce.Shared.Cores.DependencyInjections;
 using eCommerce.Shared.Cores.Responses;
 using eCommerce.Shared.Extensions;
 using Serilog;
 using Serilog.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseServiceProviderFactory(new WindsorServiceProviderFactory())
+    .ConfigureContainer<WindsorContainer>(options =>
+    {
+        options.AddWindsorCastle();
+    });
 
 var configuration = LocalConfigurationExtentions.GetConfigurationBuilder();
 Log.Logger = new LoggerConfiguration()

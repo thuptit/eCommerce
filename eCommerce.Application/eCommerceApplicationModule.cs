@@ -17,6 +17,7 @@ public class eCommerceApplicationModule : AbpModule
         {
             options.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
         });
+        context.Services.AddScoped<IApplicationService, ApplicationServiceBase>();
         context.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         context.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
     }

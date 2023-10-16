@@ -15,18 +15,17 @@ namespace eCommerce.Host.Controllers
     public class TestController : ControllerBase
     {
         private readonly ICacheService _cacheService;
-
-        public TestController(ICacheService cacheService)
+        private readonly ITestConvention _test;
+        public TestController(ICacheService cacheService, ITestConvention test)
         {
             _cacheService = cacheService;
+            _test = test;
         }
         [HttpGet]
-        [Authorize(Policy = "admin")]
-        [UnitOfWork(isTransactional: false)]
         public async Task<string> Get()
         {
             await Task.CompletedTask;
-            return "Hello";
+            return _test.GetName();
         }
 
         [HttpGet("SetKey")]

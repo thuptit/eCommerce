@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using eCommerce.Shared.Cores.Caches;
+using eCommerce.Shared.Cores.DependencyInjections;
 using eCommerce.Shared.Cores.Responses;
 using eCommerce.Shared.Cores.Sessions;
 using eCommerce.Shared.Extensions;
@@ -38,5 +39,6 @@ public class eCommerceSharedModule : AbpModule
             options.Configuration = configuration["RedisCache"];
             options.InstanceName = "eCommerce";
         });
+        
     }
 }
