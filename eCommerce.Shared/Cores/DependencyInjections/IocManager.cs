@@ -6,28 +6,18 @@ namespace eCommerce.Shared.Cores.DependencyInjections;
 
 public class IocManager : IIocManager
 {
-    // private static IWindsorContainer _container = new WindsorContainer();
-    // public IWindsorContainer Instance => _container;
-    //
-    // public T Resolve<T>() => Instance.Resolve<T>();
-    // public object Resolve(Type type) => Instance.Resolve(type);
-    // public void RegisterByConventional(IEnumerable<Assembly> assemblies)
-    // {
-    //     foreach (var assembly in assemblies)
-    //     {
-    //         Instance.Register(Classes.FromAssembly(assembly)
-    //             .IncludeNonPublicTypes()
-    //             .BasedOn<ITransientDependency>()
-    //             .WithService.Self()
-    //             .WithService.DefaultInterfaces()
-    //             .LifestyleTransient());
-    //
-    //         Instance.Register(Classes.FromAssembly(assembly)
-    //             .IncludeNonPublicTypes()
-    //             .BasedOn<ISingletonDependency>()
-    //             .WithService.DefaultInterfaces()
-    //             .WithService.Self()
-    //             .LifestyleSingleton());
-    //     }
-    // }
+    public IWindsorContainer Instance { get => _container;
+        set => _container = value;
+    }
+    private IWindsorContainer _container;
+    
+    public T Resolve<T>() => _container.Resolve<T>();
+    public T Resolve<T>(Type type) => (T)Instance.Resolve(type);
+    public void RegisterByConventional(IEnumerable<Assembly> assemblies)
+    {
+        foreach (var assembly in assemblies)
+        {
+            _container.Register(Classes.FromAssembly(assembly));
+        }
+    }
 }

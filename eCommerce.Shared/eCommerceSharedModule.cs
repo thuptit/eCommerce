@@ -19,6 +19,7 @@ public class eCommerceSharedModule : AbpModule
         context.Services.AddScoped(typeof(WrapperResponseMiddleware));
         context.Services.AddScoped<IEcommerceSession, EcommerceSession>();
         context.Services.AddScoped<ICacheService, CacheService>();
+        context.Services.AddSingleton<IIocManager, IocManager>();
         #endregion
         var configuration = LocalConfigurationExtentions.GetConfigurationBuilder();;
         context.Services.AddAuthorization(options =>
