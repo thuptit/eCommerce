@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Shared.Cores.Caches;
+using eCommerce.Shared.Cores.DependencyInjections;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +16,18 @@ namespace eCommerce.Host.Controllers
     public class TestController : ControllerBase
     {
         private readonly ICacheService _cacheService;
-        private readonly ITestConvention _test;
-        public TestController(ICacheService cacheService, ITestConvention test)
+        private readonly IIocManager _test;
+        private readonly ITestConvention _testConvention;
+        public TestController(ICacheService cacheService, IIocManager _iocManager)
         {
             _cacheService = cacheService;
-            _test = test;
+            _testConvention = _iocManager.Resolve<ITestConvention>();
         }
         [HttpGet]
         public async Task<string> Get()
         {
             await Task.CompletedTask;
-            return _test.GetName();
+            return _testConvention.GetName();
         }
 
         [HttpGet("SetKey")]
