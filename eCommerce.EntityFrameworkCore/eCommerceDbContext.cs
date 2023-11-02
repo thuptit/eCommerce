@@ -27,6 +27,9 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
     public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<ProductInventory> ProductInventories { get; set; }
     public DbSet<UserPayment> UserPayments { get; set; }
+    public DbSet<GroupChat> GroupChats { get; set; }
+    public DbSet<GroupChatUser> GroupChatUsers { get; set; }
+    public DbSet<MessageChat> MessageChats { get; set; }
     #endregion
     
     private IDbContextTransaction _currentTransaction;
@@ -37,7 +40,6 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
     {
         _session = session;
         _logger = NullLogger<eCommerceDbContext>.Instance;
-        ;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
