@@ -47,10 +47,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("default");
-app.Use(async (context, func) =>
-{
-    await func(context);
-});
 app.UseHttpsRedirection();
 app.UseMiddleware<WrapperResponseMiddleware>();
 app.UseAuthentication();
