@@ -48,7 +48,7 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
             .UseLazyLoadingProxies()
             .AddInterceptors(new List<IInterceptor>()
             {
-                new eCommerceSaveChangesIntercetor(_session?.UserId)
+                new eCommerceSaveChangesIntercetor(_session?.UserId, _logger)
             });
         base.OnConfiguring(optionsBuilder);
     }

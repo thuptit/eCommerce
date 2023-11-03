@@ -33,14 +33,14 @@ public class CategoryCommandHandler : ApplicationServiceBase,
             Name = request.Name,
             Description = request.Description
         });
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await _repository.CurrentUnitOfWork.SaveChangesAsync();
         return "Created Successfully";
     }
 
     public async Task<string> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
         await _repository.DeleteAsync(request.Id);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await _repository.CurrentUnitOfWork.SaveChangesAsync();
         return "Delete Successfully";
     }
 }

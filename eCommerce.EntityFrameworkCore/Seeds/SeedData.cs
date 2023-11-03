@@ -50,7 +50,8 @@ public class SeedData
                         UserName = eCommerceConsts.UserNameAdmin,
                         Email = "admin@thunv.com",
                         IsAdmin = true,
-                        Address = "Ha Noi, Viet Nam"
+                        Address = "Ha Noi, Viet Nam",
+                        AvatarUrl = string.Empty
                     };
                     await _userManager.CreateAsync(user, eCommerceConsts.PasswordAdmin);
                     await _context.SaveChangesAsync();

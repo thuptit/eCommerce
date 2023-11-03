@@ -4,8 +4,6 @@ namespace eCommerce.Application;
 
 public abstract class ApplicationServiceBase : IApplicationService
 {
-    public IUnitOfWork CurrentUnitOfWork { get => _unitOfWork; set => _unitOfWork = value; }
-    private IUnitOfWork _unitOfWork;
 }
 
 public interface IApplicationService

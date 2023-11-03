@@ -31,7 +31,7 @@ export class MenuBarComponent {
     },
     {
       title: 'Users',
-      link: 'users',
+      link: 'user',
       icon: 'people'
     }
   ];
