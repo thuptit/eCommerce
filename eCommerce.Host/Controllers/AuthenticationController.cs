@@ -45,6 +45,24 @@ namespace eCommerce.Host.Controllers
                 AccessToken = await _mediator.Send(new TokenGenerationCommand(login))
             };
         }
+        [HttpPost("LoginAdminSiteWithGoogle")]
+        [AllowAnonymous]
+        public async Task<LoginResponseDto> LoginAdminSiteWithGoogle(LoginAdminSiteWithGoogleCommand command)
+        {
+            var login = await _mediator.Send(command);
+
+            if (!login.IsSucess)
+                throw new AuthenticationException("Login failed");
+
+            return new LoginResponseDto()
+            {
+                UserName = login.UserName,
+                Email = login.Email,
+                UserId = login.Id,
+                Roles = login.Roles,
+                AccessToken = await _mediator.Send(new TokenGenerationCommand(login))
+            };
+        }
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task Login()

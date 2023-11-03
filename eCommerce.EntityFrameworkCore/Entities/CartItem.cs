@@ -11,6 +11,5 @@ public class CartItem : EntityBase<long>
     public long UserId { get; set; }
     [ForeignKey(nameof(UserId))]
     public virtual User Users { get; set; }
-    
     public int Quantity { get; set; }
 }

@@ -14,6 +14,12 @@ const routes: Routes = [
       },
       {
         path: 'category', loadChildren: () => import('./category/category.module').then(m => m.CategoryModule)
+      },
+      {
+        path: 'chat', loadChildren: () => import('./chatting/chatting.module').then(m => m.ChattingModule)
+      },
+      {
+        path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule)
       }
     ]
   },

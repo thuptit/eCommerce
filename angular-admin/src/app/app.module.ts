@@ -7,8 +7,18 @@ import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from 'src/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NbMenuModule, NbSidebarModule, NbThemeModule } from '@nebular/theme';
+import { NbMenuModule, NbSidebarModule, NbThemeModule, NbThemeService } from '@nebular/theme';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+  GoogleLoginProvider,
+  GoogleSigninButtonDirective,
+  GoogleSigninButtonModule,
+} from '@abacritt/angularx-social-login';
+import { environment } from 'src/environments/environment';
+import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
+const clientId = environment.clientId;
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,9 +32,27 @@ import { NbMenuModule, NbSidebarModule, NbThemeModule } from '@nebular/theme';
     NgbModule,
     NbThemeModule.forRoot({ name: 'light' }),
     NbSidebarModule.forRoot(),
-    NbMenuModule.forRoot()
+    NbMenuModule.forRoot(),
+    SocialLoginModule,
+    GoogleSigninButtonModule,
+    SweetAlert2Module.forRoot()
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(clientId),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    },
+    SweetAlert2LoaderService,
+    GoogleSigninButtonDirective
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

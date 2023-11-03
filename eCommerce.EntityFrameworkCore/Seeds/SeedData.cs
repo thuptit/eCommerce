@@ -3,6 +3,8 @@ using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace eCommerce.EntityFrameworkCore.Seeds;
 
@@ -10,10 +12,12 @@ public class SeedData
 {
     private readonly eCommerceDbContext _context;
     private readonly UserManager<User> _userManager;
+    private readonly ILogger<SeedData> _logger;
     public SeedData(eCommerceDbContext context, UserManager<User> userManager)
     {
         _context = context;
         _userManager = userManager;
+        _logger = NullLogger<SeedData>.Instance;
     }
     public async Task UserRoleSeed()
     {
@@ -46,7 +50,8 @@ public class SeedData
                         UserName = eCommerceConsts.UserNameAdmin,
                         Email = "admin@thunv.com",
                         IsAdmin = true,
-                        Address = "Ha Noi, Viet Nam"
+                        Address = "Ha Noi, Viet Nam",
+                        AvatarUrl = string.Empty
                     };
                     await _userManager.CreateAsync(user, eCommerceConsts.PasswordAdmin);
                     await _context.SaveChangesAsync();
@@ -59,12 +64,12 @@ public class SeedData
                 }
 
                 await _context.SaveChangesAsync();
-
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
+                _logger.LogException(ex);
             }
         }
         

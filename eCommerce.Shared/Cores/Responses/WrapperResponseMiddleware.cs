@@ -29,7 +29,7 @@ public class WrapperResponseMiddleware : IMiddleware
             responseBodyStream.Seek(0, SeekOrigin.Begin);
             var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();
             var responseBodyJson = TryDeserializeObject(responseBody);
-            ResponseResult wrappedResponse = new ResponseResult();
+            ResponseResult wrappedResponse;
             if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
             {
                 wrappedResponse = new ResponseResult(HttpStatusCode.Unauthorized, "Unauthorized");
@@ -59,6 +59,7 @@ public class WrapperResponseMiddleware : IMiddleware
             var wrappedResponse = new ResponseResult(HttpStatusCode.InternalServerError, ex.Message);
             var jsonBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(wrappedResponse));
             await originalBody.WriteAsync(jsonBytes);
+            _logger.LogException(ex);
         }
         finally
         {
@@ -74,8 +75,9 @@ public class WrapperResponseMiddleware : IMiddleware
         {
             return JsonSerializer.Deserialize<object>(json);
         }
-        catch
+        catch(Exception ex)
         {
+            //_logger.LogInformation(ex.Message);
             return json;
         }
     }

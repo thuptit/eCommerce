@@ -14,8 +14,11 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
-import { NbActionsModule, NbColumnsService, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSelectModule, NbSidebarModule, NbThemeModule, NbThemeService, NbUserModule } from '@nebular/theme';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NbActionsModule, NbContextMenuModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbSelectModule, NbSidebarModule, NbThemeModule, NbThemeService, NbUserModule } from '@nebular/theme';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
     declarations: [
@@ -42,8 +45,11 @@ import { AppHeaderComponent } from './components/app-header/app-header.component
         NbContextMenuModule,
         NbActionsModule,
         NbSelectModule,
+        MatDialogModule,
+        MatProgressSpinnerModule,
         FormsModule,
-        NbUserModule
+        NbUserModule,
+        SweetAlert2Module
     ],
     exports: [
         MatFormFieldModule,
@@ -68,7 +74,10 @@ import { AppHeaderComponent } from './components/app-header/app-header.component
         NbActionsModule,
         NbSelectModule,
         FormsModule,
-        NbUserModule
+        MatDialogModule,
+        MatProgressSpinnerModule,
+        NbUserModule,
+        SweetAlert2Module
     ],
     providers: [
         AuthGuard,

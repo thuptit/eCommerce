@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using eCommerce.Shared.Cores.Caches;
+using eCommerce.Shared.Cores.DependencyInjections;
 using eCommerce.Shared.Cores.Responses;
 using eCommerce.Shared.Cores.Sessions;
 using eCommerce.Shared.Extensions;
@@ -18,6 +19,7 @@ public class eCommerceSharedModule : AbpModule
         context.Services.AddScoped(typeof(WrapperResponseMiddleware));
         context.Services.AddScoped<IEcommerceSession, EcommerceSession>();
         context.Services.AddScoped<ICacheService, CacheService>();
+        context.Services.AddSingleton<IIocManager, IocManager>();
         #endregion
         var configuration = LocalConfigurationExtentions.GetConfigurationBuilder();;
         context.Services.AddAuthorization(options =>
@@ -38,5 +40,6 @@ public class eCommerceSharedModule : AbpModule
             options.Configuration = configuration["RedisCache"];
             options.InstanceName = "eCommerce";
         });
+        
     }
 }

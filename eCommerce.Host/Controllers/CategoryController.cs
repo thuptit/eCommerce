@@ -20,11 +20,9 @@ namespace eCommerce.Host.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IDistributedCache _cache;
-        public CategoryController(IMediator mediator, IDistributedCache cache)
+        public CategoryController(IMediator mediator)
         {
             _mediator = mediator;
-            _cache = cache;
         }
         [HttpGet]
         public async Task<IEnumerable<CategoryDto>> Get()
@@ -40,7 +38,7 @@ namespace eCommerce.Host.Controllers
 
         [HttpPost]
         [Authorize("admin")]
-        public async Task<bool> Post([FromBody] CreateCategoryCommand request)
+        public async Task<string> Post([FromBody] CreateCategoryCommand request)
         {
             return await _mediator.Send(request);
         }
@@ -53,25 +51,15 @@ namespace eCommerce.Host.Controllers
 
         // DELETE: api/Category/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<string> Delete(int id)
         {
+            return await _mediator.Send(new DeleteCategoryCommand(id));
         }
         // GET: api/Category/GetAllPaging
         [HttpPost("GetAllPaging")]
         public async Task<PagingBase<CategoryDto>> GetAllPaging([FromBody]GetAllPagingQuery query)
         {
             return await _mediator.Send(query);
-        }
-
-        [HttpPost("redis-cache")]
-        public async Task AddCache()
-        {
-            _cache.Set("category",Encoding.UTF8.GetBytes("Hello"));
-        }
-        [HttpGet("redis-cache")]
-        public async Task<string> GetCachce()
-        {
-            return Encoding.UTF8.GetString(await _cache.GetAsync("category"));
         }
     }
 }

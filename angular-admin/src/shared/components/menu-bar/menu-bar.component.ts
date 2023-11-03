@@ -25,8 +25,13 @@ export class MenuBarComponent {
       icon: 'gift'
     },
     {
+      title: 'Chat',
+      link: 'chat',
+      icon: 'message-circle-outline'
+    },
+    {
       title: 'Users',
-      link: 'users',
+      link: 'user',
       icon: 'people'
     }
   ];
