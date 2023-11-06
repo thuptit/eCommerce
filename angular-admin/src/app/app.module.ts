@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +17,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { BootstrapperService } from 'src/core/services/bootstrapper.service';
 
 const clientId = environment.clientId;
 @NgModule({
@@ -49,6 +50,14 @@ const clientId = environment.clientId;
           },
         ],
       } as SocialAuthServiceConfig,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (bootstrapper: BootstrapperService) => () => {
+        bootstrapper.loadConfigurationData()
+      },
+      deps: [BootstrapperService],
+      multi: true
     },
     SweetAlert2LoaderService,
     GoogleSigninButtonDirective
