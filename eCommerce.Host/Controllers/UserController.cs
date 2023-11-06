@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eCommerce.Shared.Commands.Users;
 using eCommerce.Shared.Cores.DataFilters;
 using eCommerce.Shared.DataTransferObjects.Users;
 using eCommerce.Shared.Queries.Users;
@@ -43,5 +44,11 @@ namespace eCommerce.Host.Controllers
             return await _mediator.Send(request);
         }
 
+        [Authorize("Admin")]
+        [HttpPost("CreateUser")]
+        public async Task<string> CreateUser([FromForm] CreateUserCommand command)
+        {
+            return await _mediator.Send(command);
+        }
     }
 }

@@ -26,7 +26,6 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
     this.initForm();
   }
   private setAvatar() {
-    console.log(BootstrapperService.defaultAvatar)
     if (this.data.model.avatarUrl) {
       this.avatar = this.data.model.avatarUrl;
     }
@@ -38,7 +37,7 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
     this.formGroup = new FormGroup({
       userName: new FormControl(this.data.model.userName, [Validators.required]),
       phoneNumber: new FormControl(this.data.model.phoneNumber, [Validators.required]),
-      email: new FormControl(this.data.model.email, Validators.required),
+      email: new FormControl(this.data.model.email, [Validators.required, Validators.email]),
       address: new FormControl(this.data.model.address),
     });
   }
@@ -55,8 +54,12 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
     }
   }
   onDeleteAvatar() {
+    this.avatar = BootstrapperService.defaultAvatar;
   }
   onSubmit() {
+    if (this.formGroup.invalid) {
+      return;
+    }
 
   }
 }
