@@ -5,6 +5,9 @@
     "outDir": "./out-tsc/app",
     "types": [
       "@angular/localize"
+    ],
+    "typeRoots": [
+      "./src/globals.d.ts"
     ]
   },
   "files": [

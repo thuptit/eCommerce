@@ -48,6 +48,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("default");
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseMiddleware<WrapperResponseMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();

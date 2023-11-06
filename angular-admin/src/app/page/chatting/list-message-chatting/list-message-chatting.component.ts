@@ -37,7 +37,7 @@ export class ListMessageChattingComponent {
   private loadMessages(): void {
     this.messages = [
       {
-        type: 'link',
+        type: 'text',
         text: 'Now you able to use links!',
         customMessageData: {
           href: 'https://akveo.github.io/nebular/',
@@ -51,7 +51,7 @@ export class ListMessageChattingComponent {
         },
       },
       {
-        type: 'link',
+        type: 'text',
         customMessageData: {
           href: 'https://akveo.github.io/ngx-admin/',
           text: 'Go to ngx-admin',
@@ -64,7 +64,7 @@ export class ListMessageChattingComponent {
         },
       },
       {
-        type: 'button',
+        type: 'text',
         customMessageData: 'Click to scroll down',
         reply: false,
         date: new Date(),

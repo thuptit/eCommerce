@@ -14,18 +14,18 @@ import { DialogResultModel } from 'src/core/models/dialog-result.model';
   templateUrl: './list-user.component.html',
   styleUrls: ['./list-user.component.scss']
 })
-export class ListUserComponent extends ComponentBase{
-  displayedColumns: string[] = ['id', 'username', 'phone','email', 'address', 'creationTime', 'action'];
+export class ListUserComponent extends ComponentBase {
+  displayedColumns: string[] = ['id', 'username', 'phone', 'email', 'address', 'creationTime', 'action'];
   dataSource = new MatTableDataSource<UserModel>();
   totalCount: number = 0;
   searchText: string = '';
   isLoading: boolean = false;
   @ViewChild(MatPaginator) paginator = {} as MatPaginator;
   gridParam = { pageIndex: 0, pageSize: 10, searchText: '' } as UserGridParam;
-  constructor(private _userService: UserService, public dialog: MatDialog){
+  constructor(private _userService: UserService, public dialog: MatDialog) {
     super();
   }
-  ngOnInit(){
+  ngOnInit() {
     this.getAllPaging();
   }
   onSearch() {
@@ -35,7 +35,7 @@ export class ListUserComponent extends ComponentBase{
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  getAllPaging(){
+  getAllPaging() {
     this._userService.getAllPaging(this.gridParam).subscribe(response => {
       this.isLoading = response.isLoading;
       if (!response.Success && response.isLoading) return;
@@ -50,7 +50,7 @@ export class ListUserComponent extends ComponentBase{
   onCreate(enterAnimationDuration: string, exitAnimationDuration: string) {
     const modalCreate = this.dialog.open(CreateOrUpdateUserComponent, {
       autoFocus: true,
-      width: '500px',
+      width: '700px',
       enterAnimationDuration,
       exitAnimationDuration,
       data: {
@@ -64,12 +64,12 @@ export class ListUserComponent extends ComponentBase{
       this.getAllPaging();
     });
   }
-  onChangePage(event: any){
+  onChangePage(event: any) {
     this.gridParam.pageIndex = event.pageIndex;
     this.gridParam.pageSize = event.pageSize;
     this.getAllPaging();
   }
-  onDelete(id: number){
+  onDelete(id: number) {
 
   }
 }
