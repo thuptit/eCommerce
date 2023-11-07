@@ -51,14 +51,6 @@ const clientId = environment.clientId;
         ],
       } as SocialAuthServiceConfig,
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (bootstrapper: BootstrapperService) => () => {
-        bootstrapper.loadConfigurationData()
-      },
-      deps: [BootstrapperService],
-      multi: true
-    },
     SweetAlert2LoaderService,
     GoogleSigninButtonDirective
   ],

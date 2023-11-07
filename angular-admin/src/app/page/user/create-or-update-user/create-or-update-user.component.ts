@@ -5,6 +5,7 @@ import { DialogResultModel } from 'src/core/models/dialog-result.model';
 import { CreateUserModel, UserDataDialog } from 'src/core/models/user.model';
 import { BootstrapperService } from 'src/core/services/bootstrapper.service';
 import { CategoryService } from 'src/core/services/category.service';
+import { CommonService } from 'src/core/services/common.service';
 import { UserService } from 'src/core/services/user.service';
 import { ComponentBase } from 'src/shared/component-base.component';
 
@@ -20,7 +21,8 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
   avatarFile!: File;
   constructor(public dialogRef: MatDialogRef<CreateOrUpdateUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: UserDataDialog,
-    private _userService: UserService) {
+    private _userService: UserService,
+    private _common: CommonService) {
     super();
   }
 
@@ -33,7 +35,7 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
       this.avatar = this.data.model.avatarUrl;
     }
     else {
-      this.avatar = BootstrapperService.defaultAvatar;
+      this.avatar = this._common.defaultAvatar;
     }
   }
   private initForm() {
@@ -52,12 +54,12 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event) => { // called once readAsDataURL is completed
-        this.avatar = event.target?.result ?? BootstrapperService.defaultAvatar;
+        this.avatar = event.target?.result ?? this._common.defaultAvatar;
       }
     }
   }
   onDeleteAvatar() {
-    this.avatar = BootstrapperService.defaultAvatar;
+    this.avatar = this._common.defaultAvatar;
   }
   onSubmit() {
     if (this.formGroup.invalid) {
