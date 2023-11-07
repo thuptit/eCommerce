@@ -39,6 +39,7 @@ export class AppHeaderComponent {
   }
   getUserInfo() {
     this.userInfo = this.tokenAuth.getUser();
+    console.log(this.userInfo)
   }
   changeTheme() {
     this.themeService.changeTheme(this.selectedTheme);

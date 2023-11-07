@@ -32,6 +32,8 @@ public class UnitOfWorkMiddleware : IMiddleware
     private bool IsTransactional(HttpContext context)
     {
         var endPoint = context.GetEndpoint();
+        if (endPoint == null)
+            return false;
         var transactionAttribute = endPoint.Metadata.GetMetadata<UnitOfWorkAttribute>();
         if (transactionAttribute != null && transactionAttribute.isTransactional)
         {

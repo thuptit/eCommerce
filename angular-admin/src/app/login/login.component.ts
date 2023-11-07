@@ -80,7 +80,8 @@ export class LoginComponent {
       userId: response.Result?.userId,
       email: response.Result?.email,
       roles: response.Result?.roles,
-      userName: response.Result?.userName
+      userName: response.Result?.userName,
+      avatarUrl: response.Result?.avatarUrl
     } as UserAuth;
 
     this._tokenAuth.setUser(userAuth);

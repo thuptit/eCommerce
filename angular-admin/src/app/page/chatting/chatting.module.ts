@@ -8,6 +8,7 @@ import { SharedModule } from 'src/shared/shared.module';
 import { ListUserChattingComponent } from './list-user-chatting/list-user-chatting.component';
 import { ListMessageChattingComponent } from './list-message-chatting/list-message-chatting.component';
 import { NbCardModule, NbChatModule, NbListModule } from '@nebular/theme';
+import { AddConversationDialogComponent } from './list-user-chatting/add-conversation-dialog/add-conversation-dialog.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { NbCardModule, NbChatModule, NbListModule } from '@nebular/theme';
     ListChatComponent,
     ChattingComponent,
     ListUserChattingComponent,
-    ListMessageChattingComponent
+    ListMessageChattingComponent,
+    AddConversationDialogComponent
   ],
   imports: [
     CommonModule,

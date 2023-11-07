@@ -3,4 +3,5 @@ export interface UserAuth {
     userId: number;
     roles: string[];
     email: string;
+    avatarUrl: string;
 }

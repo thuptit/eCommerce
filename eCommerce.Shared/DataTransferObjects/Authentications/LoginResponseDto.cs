@@ -7,4 +7,5 @@ public class LoginResponseDto
     public long UserId { get; set; }
     public string AccessToken { get; set; }
     public IList<string> Roles { get; set; }
+    public string AvatarUrl { get; set; }
 }

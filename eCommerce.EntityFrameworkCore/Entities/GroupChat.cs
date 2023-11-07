@@ -6,5 +6,4 @@ namespace eCommerce.EntityFrameworkCore.Entities;
 public class GroupChat : EntityBase<long>
 {
     public string? Name { get; set; }
-    public GroupChatType Type { get; set; }
 }

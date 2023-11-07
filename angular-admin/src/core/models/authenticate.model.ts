@@ -4,4 +4,5 @@ export interface AuthenticateModel {
     roles: string[];
     email: string;
     accessToken: string;
+    avatarUrl:string;
 }

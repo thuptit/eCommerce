@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eCommerce.Application.Users;
+using eCommerce.Application.Users.Dtos;
 using eCommerce.Shared.Commands.Users;
 using eCommerce.Shared.Cores.DataFilters;
 using eCommerce.Shared.DataTransferObjects.Users;
@@ -18,9 +20,11 @@ namespace eCommerce.Host.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public UserController(IMediator mediator)
+        private readonly IUserService _userService;
+        public UserController(IMediator mediator, IUserService userService)
         {
             _mediator = mediator;
+            _userService = userService;
         }
         [HttpGet]
         [Authorize]
@@ -49,6 +53,13 @@ namespace eCommerce.Host.Controllers
         public async Task<string> CreateUser([FromForm] CreateUserCommand command)
         {
             return await _mediator.Send(command);
+        }
+
+        [Authorize("Admin")]
+        [HttpGet("GetUserByName")]
+        public async Task<List<AutoCompleteUserDto>> GetUserByName(string name)
+        {
+            return await _userService.GetUserByName(name);
         }
     }
 }

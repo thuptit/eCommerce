@@ -18,10 +18,14 @@ export class HeaderHttpInterceptor implements HttpInterceptor {
     if (token === null || token === undefined || token === '') {
       return next.handle(request);
     }
+    const isFormData = request.body instanceof FormData;
+    let contentType = isFormData ? 'multipart/form-data' : 'application/json';
     const authReq = request.clone({
-      headers: request.headers.set('Content-type', 'application/json')
+      headers: request.headers
         .set('Authorization', `Bearer ${token}`)
+        .set('Accept', isFormData ? "multipart/form-data" : 'application/json, text/plain, */*')
     });
+
     return next.handle(authReq);
   }
 }

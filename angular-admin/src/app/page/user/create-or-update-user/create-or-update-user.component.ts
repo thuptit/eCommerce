@@ -1,9 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UserDataDialog } from 'src/core/models/user.model';
+import { DialogResultModel } from 'src/core/models/dialog-result.model';
+import { CreateUserModel, UserDataDialog } from 'src/core/models/user.model';
 import { BootstrapperService } from 'src/core/services/bootstrapper.service';
 import { CategoryService } from 'src/core/services/category.service';
+import { CommonService } from 'src/core/services/common.service';
+import { UserService } from 'src/core/services/user.service';
 import { ComponentBase } from 'src/shared/component-base.component';
 
 @Component({
@@ -15,9 +18,11 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
   formGroup!: FormGroup;
   isSaving: boolean = false;
   avatar!: ArrayBuffer | string;
+  avatarFile!: File;
   constructor(public dialogRef: MatDialogRef<CreateOrUpdateUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: UserDataDialog,
-    private _categorySevice: CategoryService) {
+    private _userService: UserService,
+    private _common: CommonService) {
     super();
   }
 
@@ -30,7 +35,7 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
       this.avatar = this.data.model.avatarUrl;
     }
     else {
-      this.avatar = BootstrapperService.defaultAvatar;
+      this.avatar = this._common.defaultAvatar;
     }
   }
   private initForm() {
@@ -44,22 +49,35 @@ export class CreateOrUpdateUserComponent extends ComponentBase {
 
   onSelectFile(event: any) {
     if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
-
+      const reader = new FileReader();
+      this.avatarFile = event.target.files[0];
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event) => { // called once readAsDataURL is completed
-        this.avatar = event.target?.result ?? BootstrapperService.defaultAvatar;
+        this.avatar = event.target?.result ?? this._common.defaultAvatar;
       }
     }
   }
   onDeleteAvatar() {
-    this.avatar = BootstrapperService.defaultAvatar;
+    this.avatar = this._common.defaultAvatar;
   }
   onSubmit() {
     if (this.formGroup.invalid) {
       return;
     }
+    const user = {
+      address: this.formGroup.controls['address'].value,
+      email: this.formGroup.controls['email'].value,
+      avatarFile: this.avatarFile,
+      phoneNumber: this.formGroup.controls['phoneNumber'].value,
+      userName: this.formGroup.controls['userName'].value
+    } as CreateUserModel;
+    this._userService.create(user).subscribe(response => {
+      this.isSaving = response.isLoading;
+      if (response.isLoading || !response.Success)
+        return;
 
+      this.dialogRef.close({ data: response.Result, isSuccess: true } as DialogResultModel<string>);
+    })
   }
 }

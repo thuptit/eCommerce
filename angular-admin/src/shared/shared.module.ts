@@ -19,6 +19,7 @@ import { NbActionsModule, NbContextMenuModule, NbIconModule, NbInputModule, NbLa
 import { AppHeaderComponent } from './components/app-header/app-header.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sw
         MatProgressSpinnerModule,
         FormsModule,
         NbUserModule,
-        SweetAlert2Module
+        SweetAlert2Module,
+        MatAutocompleteModule
     ],
     exports: [
         MatFormFieldModule,
@@ -77,7 +79,8 @@ import { SweetAlert2LoaderService, SweetAlert2Module } from '@sweetalert2/ngx-sw
         MatDialogModule,
         MatProgressSpinnerModule,
         NbUserModule,
-        SweetAlert2Module
+        SweetAlert2Module,
+        MatAutocompleteModule
     ],
     providers: [
         AuthGuard,
