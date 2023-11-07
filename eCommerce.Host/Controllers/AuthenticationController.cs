@@ -42,6 +42,7 @@ namespace eCommerce.Host.Controllers
                 Email = login.Email,
                 UserId = login.Id,
                 Roles = login.Roles,
+                AvatarUrl = login.AvatarUrl,
                 AccessToken = await _mediator.Send(new TokenGenerationCommand(login))
             };
         }
@@ -60,6 +61,7 @@ namespace eCommerce.Host.Controllers
                 Email = login.Email,
                 UserId = login.Id,
                 Roles = login.Roles,
+                AvatarUrl = login.AvatarUrl,
                 AccessToken = await _mediator.Send(new TokenGenerationCommand(login))
             };
         }

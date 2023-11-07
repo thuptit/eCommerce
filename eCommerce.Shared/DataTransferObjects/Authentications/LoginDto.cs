@@ -7,13 +7,14 @@ public class LoginDto
     public string Email { get; set; }
     public string Address { get; set; }
     public IList<string> Roles { get; set; }
+    public string AvatarUrl { get; set; }
     public bool IsSucess { get; set; }
     public IEnumerable<string> ErrorMessages { get; set; }
 }
 
 public class LoginSucess : LoginDto
 {
-    public LoginSucess(long id, string userName, string email, string address, IList<string> roles)
+    public LoginSucess(long id, string userName, string email, string address, IList<string> roles, string avatarUrl)
     {
         Id = id;
         UserName = userName;
@@ -21,6 +22,7 @@ public class LoginSucess : LoginDto
         Address = address;
         IsSucess = true;
         Roles = roles;
+        AvatarUrl = avatarUrl;
     }
 }
 

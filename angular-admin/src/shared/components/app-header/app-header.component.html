@@ -35,8 +35,6 @@
         <nb-option value="dark">Dark</nb-option>
         <nb-option value="cosmic">Cosmic</nb-option>
         <nb-option value="corporate">Corporate</nb-option>
-        <!-- <nb-option value="material-light">Material Light</nb-option>
-        <nb-option value="material-dark">Material Dark</nb-option> -->
       </nb-select>
     </nb-action>
     <nb-action badgePosition="top right">
@@ -44,6 +42,7 @@
         size="large"
         [name]="userInfo.userName"
         [title]="userInfo.roles[0]"
+        [picture]="userInfo.avatarUrl"
         color="#cccccc"
         [nbContextMenu]="items"
         nbContextMenuTag="menu-context-user-tag"

@@ -29,7 +29,9 @@ public class eCommerceDbContext : IdentityDbContext<User,Role,long>, IUnitOfWork
     public DbSet<UserPayment> UserPayments { get; set; }
     public DbSet<GroupChat> GroupChats { get; set; }
     public DbSet<GroupChatUser> GroupChatUsers { get; set; }
-    public DbSet<MessageChat> MessageChats { get; set; }
+    public DbSet<MessageChatGroup> MessageChatGroups { get; set; }
+    public DbSet<MessageChatPersonal> MessageChatPersonals { get; set; }
+    public DbSet<PersonalChat> PersonalChats { get; set; }
     #endregion
     
     private IDbContextTransaction _currentTransaction;

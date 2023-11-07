@@ -30,13 +30,14 @@ namespace eCommerce.Application.Users
         public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             string avatarUrl = _configurationService.GetDefaultAvatar();
+            string fileName = request.UserName + "_img_" + Path.GetExtension(request.AvatarFile.FileName);
             if (request.AvatarFile != null)
             {
-                var fileName = Path.Combine(_configurationService.GetRootFolder(), "avatars", request.UserName + "_img_"+request.AvatarFile.FileName);
-                using (var stream = new FileStream(fileName, FileMode.Create))
+                var fullPath = Path.Combine(_configurationService.GetRootFolder(), "avatars", fileName);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await request.AvatarFile.CopyToAsync(stream);
-                    avatarUrl = _configurationService.GetHost() + fileName;
+                    avatarUrl = _configurationService.GetHost() + "avatars/"+ fileName;
                 }
             }
             var result = await _userDomain.CreateAsync(new User()

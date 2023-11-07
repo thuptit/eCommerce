@@ -31,13 +31,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -46,7 +46,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -80,13 +80,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -99,7 +99,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -124,13 +124,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -139,16 +139,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
-
-                    b.Property<byte>("Type")
-                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 
@@ -166,13 +163,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -184,7 +181,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -203,7 +200,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     b.ToTable("GroupChatUsers");
                 });
 
-            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.MessageChat", b =>
+            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.MessageChatGroup", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -212,13 +209,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -237,13 +234,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("SeenTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("SenderId")
                         .HasColumnType("bigint");
@@ -254,9 +251,61 @@ namespace eCommerce.EntityFrameworkCore.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("SenderId");
+                    b.ToTable("MessageChatGroups");
+                });
 
-                    b.ToTable("MessageChats");
+            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.MessageChatPersonal", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("CreatorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("DeletorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSeen")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ModificationTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("ModifiorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PersonalChatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("SeenTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long>("SenderId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("PersonalChatId");
+
+                    b.ToTable("MessageChatPersonals");
                 });
 
             modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.Order", b =>
@@ -268,13 +317,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -283,7 +332,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -320,13 +369,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -338,7 +387,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -386,13 +435,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -401,7 +450,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -420,6 +469,52 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     b.ToTable("PaymentDetails");
                 });
 
+            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.PersonalChat", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("CreatorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("DeletorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModificationTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("ModifiorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ReceiverId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SenderId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("PersonalChats");
+                });
+
             modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.Product", b =>
                 {
                     b.Property<long>("Id")
@@ -432,13 +527,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -451,7 +546,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -481,13 +576,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -507,7 +602,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -538,13 +633,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -557,7 +652,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -583,13 +678,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -598,7 +693,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -672,13 +767,13 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
@@ -703,7 +798,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -762,25 +857,25 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("DeletorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("Expiry")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModificationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long?>("ModifiorId")
                         .HasColumnType("bigint");
@@ -945,7 +1040,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.MessageChat", b =>
+            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.MessageChatGroup", b =>
                 {
                     b.HasOne("eCommerce.EntityFrameworkCore.Entities.GroupChat", "GroupChat")
                         .WithMany()
@@ -953,15 +1048,18 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("eCommerce.EntityFrameworkCore.Entities.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
+                    b.Navigation("GroupChat");
+                });
+
+            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.MessageChatPersonal", b =>
+                {
+                    b.HasOne("eCommerce.EntityFrameworkCore.Entities.PersonalChat", "PersonalChat")
+                        .WithMany("MessageChatPersonals")
+                        .HasForeignKey("PersonalChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("GroupChat");
-
-                    b.Navigation("Sender");
+                    b.Navigation("PersonalChat");
                 });
 
             modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.Order", b =>
@@ -996,6 +1094,25 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.PersonalChat", b =>
+                {
+                    b.HasOne("eCommerce.EntityFrameworkCore.Entities.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eCommerce.EntityFrameworkCore.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.Product", b =>
@@ -1112,6 +1229,11 @@ namespace eCommerce.EntityFrameworkCore.Migrations
             modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.PersonalChat", b =>
+                {
+                    b.Navigation("MessageChatPersonals");
                 });
 
             modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.Product", b =>

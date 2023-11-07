@@ -64,7 +64,7 @@ public class AuthenticationCommandHandler
         {
             var user = await _userDomain.FindByNameAsync(request.UserName);
             var roles = await _userDomain.GetRolesAsync(user);
-            return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles);
+            return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles, user.AvatarUrl);
         }
 
         return new LoginFail();
@@ -83,7 +83,7 @@ public class AuthenticationCommandHandler
             var userEmail = tokenClaims.FirstOrDefault(c => c.Type == "email")?.Value;
             var user = await _userDomain.FindByEmailAsync(userEmail);
             var roles = await _userDomain.GetRolesAsync(user);
-            return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles);
+            return new LoginSucess(user.Id, user.UserName, user.Email, user.Address, roles, user.AvatarUrl);
         }
         return new LoginFail();
     }
@@ -102,7 +102,8 @@ public class AuthenticationCommandHandler
                 new Claim(JwtRegisteredClaimNames.Email, request.data.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString()),
-                new Claim("Role",string.Join(",",request.data.Roles))
+                new Claim("Role",string.Join(",",request.data.Roles)),
+                new Claim("AvatarUrl", request.data.AvatarUrl)
             }),
             Issuer = issuer,
             Audience = audience,
