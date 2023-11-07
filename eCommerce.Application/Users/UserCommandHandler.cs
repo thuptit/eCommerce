@@ -18,19 +18,14 @@ namespace eCommerce.Application.Users
         IRequestHandler<CreateUserCommand,string>
     {
         private readonly UserDomain _userDomain;
-        private readonly IUserStore<User> _userStore;
-        private readonly IUserRoleStore<User> _userRoleStore; 
         private readonly ConfigurationService _configurationService;
         public UserCommandHandler(
             UserDomain userDomain, 
-            IUserStore<User> userStore,
-            ConfigurationService configurationService,
-            IUserRoleStore<User> userRoleStore)
+            ConfigurationService configurationService
+        )
         {
             _userDomain = userDomain;
-            _userStore = userStore;
             _configurationService = configurationService;
-            _userRoleStore = userRoleStore;
         }
         public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
@@ -52,12 +47,12 @@ namespace eCommerce.Application.Users
                 PhoneNumber = request.PhoneNumber,
                 AvatarUrl = avatarUrl
             }, eCommerceConsts.PasswordAdmin);
-
+            
             if (!result.Succeeded)
                 throw new Exception("Create User Failed");
-
-            var user = await _userStore.FindByNameAsync(request.UserName,new CancellationToken());
-            await _userRoleStore.AddToRoleAsync(user, eCommerceConsts.RoleAdmin,new CancellationToken());
+            
+            var user = await _userDomain.FindByNameAsync(request.UserName);
+            await _userDomain.AddToRoleAsync(user, eCommerceConsts.RoleAdmin);
             return "Create Successfully";
         }
     }

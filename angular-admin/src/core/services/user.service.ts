@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
-import { HttpClient } from '@angular/common/http';
-import { UserGridParam, UserModel } from '../models/user.model';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CreateUserModel, UserGridParam, UserModel } from '../models/user.model';
+import { Observable, catchError, of, startWith } from 'rxjs';
 import { PagingModel, ResponseApi } from '../models/response.model';
 
 @Injectable({
@@ -17,7 +17,21 @@ export class UserService extends BaseService {
     super(httpClient);
   }
 
-  getAllPaging(gridParam: UserGridParam): Observable<ResponseApi<PagingModel<UserModel>>>{
-    return this.httpClient.post<any>(this.rootUrl + '/GetAllPaging',gridParam);
+  getAllPaging(gridParam: UserGridParam): Observable<ResponseApi<PagingModel<UserModel>>> {
+    return this.httpClient.post<any>(this.rootUrl + '/GetAllPaging', gridParam);
+  }
+
+  create(user: CreateUserModel): Observable<ResponseApi<string>> {
+    const headers = new HttpHeaders();
+    headers.set('Accept', "multipart/form-data");
+    const formData = new FormData();
+    formData.append('UserName', user.userName);
+    formData.append('PhoneNumber', user.phoneNumber);
+    formData.append('Email', user.email);
+    formData.append('Address', user.address);
+    formData.append('AvatarFile', user.avatarFile);
+    return this.httpClient.post<any>(this.rootUrl + '/CreateUser', formData, { headers })
+      .pipe(startWith({ isLoading: true, Success: false } as ResponseApi<string>),
+        catchError((error => of({ isLoading: false, Success: false } as ResponseApi<string>))));
   }
 }
