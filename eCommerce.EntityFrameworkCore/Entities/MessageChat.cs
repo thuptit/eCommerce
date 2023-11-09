@@ -21,7 +21,8 @@ public class MessageChatPersonal : EntityBase<long>
     [ForeignKey(nameof(PersonalChatId))]
     public virtual PersonalChat  PersonalChat { get; set; }
     public long SenderId { get; set; }
-
+    [ForeignKey(nameof(SenderId))]
+    public virtual User Sender { get; set; }
     public bool IsSeen { get; set; }
     public DateTime? SeenTime { get; set; }
 }

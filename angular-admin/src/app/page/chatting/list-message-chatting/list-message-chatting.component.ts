@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-list-message-chatting',
@@ -7,14 +7,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListMessageChattingComponent {
-  readonly tableData = {
-    columns: ['First Name', 'Last Name', 'Age'],
-    rows: [
-      { firstName: 'Robert', lastName: 'Baratheon', age: 46 },
-      { firstName: 'Jaime', lastName: 'Lannister', age: 31 },
-    ],
-  };
-
+  @Input() personalChatId!: number;
   messages: any[] = [];
 
   ngOnInit(): void {

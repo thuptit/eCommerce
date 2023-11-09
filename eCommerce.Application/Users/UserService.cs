@@ -23,4 +23,13 @@ public class UserService : IUserService
             })
             .ToListAsync();
     }
+
+    public async Task<List<AutoCompleteUserDto>> GetAllUser()
+    {
+        return await _userRepository.GetAll().Select(x => new AutoCompleteUserDto()
+        {
+            UserName = x.UserName,
+            Id = x.Id
+        }).ToListAsync();
+    }
 }

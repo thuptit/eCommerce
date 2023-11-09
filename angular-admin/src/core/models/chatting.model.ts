@@ -1,4 +1,21 @@
 import { BaseDataDialog } from "./base.model";
 
-export interface CreateConversationDataDialogModel extends BaseDataDialog<null>{
+export interface CreateConversationDataDialogModel extends BaseDataDialog<null> {
+}
+
+export interface UserChatModel {
+    personalChatId: number;
+    friendId: number;
+    friendName: string;
+    friendAvatarUrl: string;
+    lastMessage: MessageChatModel;
+}
+
+export interface MessageChatModel {
+    senderId: number;
+    senderName: string;
+    isSeen: boolean;
+    seenDate: Date;
+    avatarUrl: string;
+    message: string;
 }

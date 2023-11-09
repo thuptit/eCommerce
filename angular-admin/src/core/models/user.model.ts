@@ -25,3 +25,8 @@ export interface CreateUserModel {
     address: string;
     avatarFile: File;
 }
+
+export interface IdAndNameModel {
+    id: number;
+    userName: string;
+}

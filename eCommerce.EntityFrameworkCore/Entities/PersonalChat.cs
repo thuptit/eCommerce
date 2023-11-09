@@ -5,12 +5,12 @@ namespace eCommerce.EntityFrameworkCore.Entities;
 
 public class PersonalChat : EntityBase<long>
 {
-    public long SenderId { get; set; }
-    [ForeignKey(nameof(SenderId))]
-    public virtual User Sender { get; set; }
-    public long ReceiverId { get; set; }
-    [ForeignKey(nameof(ReceiverId))]
-    public virtual User Receiver { get; set; }
+    public long UserA_Id { get; set; }
+    [ForeignKey(nameof(UserA_Id))]
+    public virtual User UserA { get; set; }
+    public long UserB_Id { get; set; }
+    [ForeignKey(nameof(UserB_Id))]
+    public virtual User UserB { get; set; }
 
     public virtual ICollection<MessageChatPersonal> MessageChatPersonals { get; set; }
 

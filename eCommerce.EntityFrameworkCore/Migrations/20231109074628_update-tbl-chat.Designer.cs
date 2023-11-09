@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using eCommerce.EntityFrameworkCore;
@@ -11,9 +12,10 @@ using eCommerce.EntityFrameworkCore;
 namespace eCommerce.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(eCommerceDbContext))]
-    partial class eCommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231109074628_update-tbl-chat")]
+    partial class updatetblchat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,8 +306,6 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("PersonalChatId");
-
-                    b.HasIndex("SenderId");
 
                     b.ToTable("MessageChatPersonals");
                 });
@@ -1061,15 +1061,7 @@ namespace eCommerce.EntityFrameworkCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("eCommerce.EntityFrameworkCore.Entities.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("PersonalChat");
-
-                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("eCommerce.EntityFrameworkCore.Entities.Order", b =>

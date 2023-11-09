@@ -61,7 +61,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("default");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.MapHub<NotificationHub>("/signalr-notification");
+app.MapHub<ChattingHub>("/signalr-notification");
 app.UseMiddleware<WrapperResponseMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();

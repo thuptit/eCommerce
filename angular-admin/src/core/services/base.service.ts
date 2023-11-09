@@ -8,10 +8,10 @@ import { environment } from '../../environments/environment';
 export abstract class BaseService {
   private apiUrl = environment.apiUrl;
   constructor(_httpClient: HttpClient) { }
-  get rootUrl(): string {
+  protected get rootUrl(): string {
     return this.apiUrl + '/api/' + this.GetUrlService();
   }
-  get baseUrl(){
+  protected get baseUrl() {
     return this.apiUrl;
   }
   protected abstract GetUrlService(): string

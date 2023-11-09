@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CreateUserModel, UserGridParam, UserModel } from '../models/user.model';
+import { CreateUserModel, IdAndNameModel, UserGridParam, UserModel } from '../models/user.model';
 import { Observable, catchError, of, startWith } from 'rxjs';
 import { PagingModel, ResponseApi } from '../models/response.model';
 
@@ -33,5 +33,9 @@ export class UserService extends BaseService {
     return this.httpClient.post<any>(this.rootUrl + '/CreateUser', formData, { headers })
       .pipe(startWith({ isLoading: true, Success: false } as ResponseApi<string>),
         catchError((error => of({ isLoading: false, Success: false } as ResponseApi<string>))));
+  }
+
+  getUsers(): Observable<ResponseApi<IdAndNameModel[]>> {
+    return this.httpClient.get<any>(this.rootUrl + '/GetAllUser');
   }
 }
