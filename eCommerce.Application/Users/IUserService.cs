@@ -7,4 +7,5 @@ namespace eCommerce.Application.Users;
 public interface IUserService : IScopedDependency
 {
     Task<List<AutoCompleteUserDto>> GetUserByName(string name);
+    Task<List<AutoCompleteUserDto>> GetAllUser();
 }

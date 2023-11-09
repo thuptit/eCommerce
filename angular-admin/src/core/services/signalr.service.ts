@@ -3,6 +3,7 @@ import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { LoggerService } from './logger.service';
+import { TokenAuthService } from './token-auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,30 +13,30 @@ export class SignalrService extends BaseService {
     return '';
   }
 
-  private notificationConnection!: HubConnection;
+  private chatConnection!: HubConnection;
   public startConnection = () => {
-    this.notificationConnection = new HubConnectionBuilder()
-    .withUrl(this.baseUrl + '/signalr-notification')
-    .build();
-    this.notificationConnection.start()
-    .then((data) => console.log('Connection Started ...', data))
-    .then(() => this.getConnectionId())
-    .catch((error)=> console.log(error));
+    this.chatConnection = new HubConnectionBuilder()
+      .withUrl(this.baseUrl + '/signalr-notification')
+      .build();
+    this.chatConnection.start()
+      .then((data: any) => console.log('Connection Started ...', data))
+      .then(() => this.getConnectionId())
+      .catch((error: any) => console.log(error));
   }
   public listenerNotification = () => {
-    this.notificationConnection.on('Notify', (data)=> {
+    this.chatConnection.on('Notify', (data: any) => {
       this._logger.success(data);
     })
   }
   connectionId: any;
   private getConnectionId = () => {
-    this.notificationConnection.invoke('getconnectionid')
-    .then((data) => {
-      console.log(data);
-      this.connectionId = data;
-    });
+    this.chatConnection.invoke('getconnectionid', this._authToken.getUser().userId)
+      .then((data: any) => {
+        console.log(data);
+        this.connectionId = data;
+      });
   }
-  constructor(private _httpClient: HttpClient, private _logger: LoggerService) {
+  constructor(private _httpClient: HttpClient, private _logger: LoggerService, private _authToken: TokenAuthService) {
     super(_httpClient);
   }
 }

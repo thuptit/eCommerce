@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace eCommerce.Application.Hubs
 {
-    public class NotificationHub : Hub, ISingletonDependency
+    public class ChattingHub : Hub, ISingletonDependency
     {
         private ConcurrentDictionary<long, string> userConnection = new ConcurrentDictionary<long, string>();
         public async Task SendMessage(long userId, string message)

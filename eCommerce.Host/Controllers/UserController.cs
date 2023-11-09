@@ -61,5 +61,12 @@ namespace eCommerce.Host.Controllers
         {
             return await _userService.GetUserByName(name);
         }
+
+        [Authorize("Admin")]
+        [HttpGet("GetAllUser")]
+        public async Task<List<AutoCompleteUserDto>> GetAllUser()
+        {
+            return await _userService.GetAllUser();
+        }
     }
 }
