@@ -17,14 +17,21 @@ public class WrapperResponseMiddleware : IMiddleware
     
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        // Scope if is signalr
+        if(context.Request.Path.HasValue &&
+                context.Request.Path.Value.StartsWith("/signalr"))
+        {
+            _logger.LogInformation("Websocket ...");
+            await next(context);
+            return;
+        }
+        //end scope signalr
         var originalBody = context.Response.Body;
         var responseBodyStream = new MemoryStream();
         context.Response.Body = responseBodyStream;
-
         try
         {
             await next(context);
-            
             context.Response.ContentType = "application/json";
             responseBodyStream.Seek(0, SeekOrigin.Begin);
             var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();

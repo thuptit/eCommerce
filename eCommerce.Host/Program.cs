@@ -1,11 +1,16 @@
 using System.Reflection;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
+using eCommerce.Application.Hubs;
 using eCommerce.EntityFrameworkCore.UnitOfWorks;
 using eCommerce.Host;
 using eCommerce.Shared.Cores.DependencyInjections;
 using eCommerce.Shared.Cores.Responses;
 using eCommerce.Shared.Extensions;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 using Serilog.Exceptions;
 
@@ -27,9 +32,17 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
     
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+var resourceBuilder = ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName);
+builder.Services.AddOpenTelemetry()
+    .WithTracing(options =>
+    {
+        options.AddSource("eCommerce.Application.Authentications", "eCommerce.Application.Users")
+        .AddConsoleExporter();
+    });
 builder.Services.AddLogging(options => options.AddSerilog(Log.Logger));
 builder.Services.AddSingleton(configuration);
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 builder.Services.AddApplication<eCommerceHostModule>();
 builder.Services.AddMediatR(options =>
 {
@@ -45,10 +58,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseCors("default");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.MapHub<NotificationHub>("/signalr-notification");
 app.UseMiddleware<WrapperResponseMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -18,5 +18,4 @@ export class AddConversationDialogComponent extends ComponentBase {
     @Inject(MAT_DIALOG_DATA) public data: CreateConversationDataDialogModel){
     super();
   }
-
 }
