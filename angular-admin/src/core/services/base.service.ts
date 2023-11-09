@@ -9,7 +9,10 @@ export abstract class BaseService {
   private apiUrl = environment.apiUrl;
   constructor(_httpClient: HttpClient) { }
   get rootUrl(): string {
-    return this.apiUrl + this.GetUrlService();
+    return this.apiUrl + '/api/' + this.GetUrlService();
+  }
+  get baseUrl(){
+    return this.apiUrl;
   }
   protected abstract GetUrlService(): string
 }

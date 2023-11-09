@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core.Tokenizer;
 using System.Security.Claims;
 using System.Text;
+using eCommerce.Application.Hubs;
 using eCommerce.Domain.Domains;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared.Commands.Authentications;

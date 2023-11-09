@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eCommerce.Application.Hubs;
 using eCommerce.Shared;
 using eCommerce.Shared.Commands.Categories;
 using eCommerce.Shared.Cores.DataFilters;
+using eCommerce.Shared.Cores.Sessions;
 using eCommerce.Shared.DataTransferObjects.Categories;
 using eCommerce.Shared.Queries.Categories;
 using MediatR;
@@ -40,6 +42,7 @@ namespace eCommerce.Host.Controllers
         [Authorize("admin")]
         public async Task<string> Post([FromBody] CreateCategoryCommand request)
         {
+
             return await _mediator.Send(request);
         }
 
