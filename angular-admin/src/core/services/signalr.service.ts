@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { LoggerService } from './logger.service';
 import { TokenAuthService } from './token-auth.service';
+import { SendMessageChatModel } from '../models/chatting.model';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,27 +14,34 @@ export class SignalrService extends BaseService {
   protected override GetUrlService(): string {
     return '';
   }
-
+  public sentMessageEvent$ = new BehaviorSubject<number>(0);
+  public receivedMessageEvent$ = new BehaviorSubject<SendMessageChatModel>({} as SendMessageChatModel);
   private chatConnection!: HubConnection;
-  public startConnection = () => {
+  public startConnection = async () => {
     this.chatConnection = new HubConnectionBuilder()
       .withUrl(this.baseUrl + '/signalr-notification')
       .build();
-    this.chatConnection.start()
-      .then((data: any) => console.log('Connection Started ...', data))
+    await this.chatConnection.start()
+      .then((data: any) => console.log('Connection Started ...'))
       .then(() => this.getConnectionId())
       .catch((error: any) => console.log(error));
   }
-  public listenerNotification = () => {
-    this.chatConnection.on('Notify', (data: any) => {
-      this._logger.success(data);
+  public listenerMessage = () => {
+    console.log("Start listening ...")
+    this.chatConnection.on('ReceivedMessage', (data: SendMessageChatModel) => {
+      this.receivedMessageEvent$.next(data);
     })
+  }
+  public sendMessage = (data: SendMessageChatModel) => {
+    this.chatConnection.invoke('SendMessage', data)
+      .then((data: any) => {
+        this.sentMessageEvent$.next(data);
+      });
   }
   connectionId: any;
   private getConnectionId = () => {
     this.chatConnection.invoke('getconnectionid', this._authToken.getUser().userId)
       .then((data: any) => {
-        console.log(data);
         this.connectionId = data;
       });
   }

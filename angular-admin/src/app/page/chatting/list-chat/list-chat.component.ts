@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserModel } from 'src/core/models/user.model';
 import { ComponentBase } from 'src/shared/component-base.component';
 
 @Component({
@@ -7,12 +8,15 @@ import { ComponentBase } from 'src/shared/component-base.component';
   styleUrls: ['./list-chat.component.scss']
 })
 export class ListChatComponent extends ComponentBase {
-  isOpenConversation: boolean = false;
+  personalChatId!: number;
+  friendInfo!: UserModel;
+  isShowWindowChat: boolean = false;
   constructor() {
     super();
   }
   openConversation(event: any) {
-    console.log(event);
-
+    this.personalChatId = event.personalChatId;
+    this.friendInfo = event.friendInfo;
+    this.isShowWindowChat = true;
   }
 }
