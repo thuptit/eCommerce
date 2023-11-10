@@ -18,3 +18,11 @@ public class ChatMessageDto
     public bool IsSeen { get; set; }
     public DateTime? SeenDate { get; set; }
 }
+
+public class SendMessageChatDto
+{
+    public long ReceiverId { get; set; }
+    public long SenderId { get; set; }
+    public long PersonalChatId { get; set; }
+    public string Message { get; set; }
+}

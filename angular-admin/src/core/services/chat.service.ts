@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
 import { TokenAuthService } from './token-auth.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ResponseApi } from '../models/response.model';
 import { MessageChatModel, UserChatModel } from '../models/chatting.model';
 

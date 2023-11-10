@@ -23,9 +23,9 @@ public class ChatService : IChatService
             .Select(x => new UserChatDto()
             {
                 PersonalChatId = x.Id,
-                FriendId = x.UserA_Id != userId ? x.UserB_Id : x.UserA_Id,
-                FriendName = x.UserA_Id != userId ? x.UserB.UserName : x.UserA.UserName,
-                FriendAvatarUrl = x.UserA_Id != userId ? x.UserB.AvatarUrl : x.UserA.AvatarUrl,
+                FriendId = x.UserA_Id == userId ? x.UserB_Id : x.UserA_Id,
+                FriendName = x.UserA_Id == userId ? x.UserB.UserName : x.UserA.UserName,
+                FriendAvatarUrl = x.UserA_Id == userId ? x.UserB.AvatarUrl : x.UserA.AvatarUrl,
                 LastMessage = x.MessageChatPersonals.OrderByDescending(s => s.CreationTime)
                     .Select(s => new ChatMessageDto()
                     {

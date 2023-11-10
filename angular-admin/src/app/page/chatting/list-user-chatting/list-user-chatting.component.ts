@@ -5,6 +5,10 @@ import { AddConversationDialogComponent } from './add-conversation-dialog/add-co
 import { CreateConversationDataDialogModel, UserChatModel } from 'src/core/models/chatting.model';
 import { DialogMode } from 'src/shared/constants';
 import { ChatService } from 'src/core/services/chat.service';
+import { UserService } from 'src/core/services/user.service';
+import { mergeMap, of } from 'rxjs';
+import { ResponseApi } from 'src/core/models/response.model';
+import { UserModel } from 'src/core/models/user.model';
 
 @Component({
   selector: 'app-list-user-chatting',
@@ -13,9 +17,26 @@ import { ChatService } from 'src/core/services/chat.service';
 })
 export class ListUserChattingComponent extends ComponentBase {
   users: UserChatModel[] = [];
-  @Output() hadConversation = new EventEmitter<number>();
-  constructor(public dialog: MatDialog, private _chatService: ChatService) {
+  @Output() hadConversation = new EventEmitter<any>();
+  personalChatId: number = 0;
+  constructor(public dialog: MatDialog, private _chatService: ChatService,
+    private _userService: UserService) {
     super();
+  }
+
+  ngOnInit() {
+    this.getChatUsers();
+  }
+
+  getChatUsers() {
+    this._chatService.getListUserChat()
+      .subscribe(response => {
+        if (!response.Success) return;
+        this.users = response.Result ?? [];
+      })
+  }
+  openWindowChat(user: UserChatModel) {
+    this.handleChatAction(user.friendId);
   }
   openAddConversationDialog() {
     const dialogRef = this.dialog.open(AddConversationDialogComponent, {
@@ -24,11 +45,24 @@ export class ListUserChattingComponent extends ComponentBase {
       data: { title: 'Create new Conversation', mode: DialogMode.CREATE } as CreateConversationDataDialogModel
     });
     dialogRef.afterClosed().subscribe(friendId => {
-      this._chatService.checkCreatedChat(friendId)
-        .subscribe(response => {
-          if (!response.Success) return;
-          this.hadConversation.emit(response.Result);
-        });
+      this.handleChatAction(friendId);
     });
+  }
+
+  handleChatAction(friendId: number) {
+    this._chatService.checkCreatedChat(friendId)
+      .pipe(mergeMap(data => {
+        if (!data.Success)
+          return of({} as ResponseApi<UserModel>);
+        this.personalChatId = data.Result ?? 0;
+        return this._userService.getUserInfo(friendId);
+      }))
+      .subscribe(response => {
+        if (!response.Success) return;
+        this.hadConversation.emit({ personalChatId: this.personalChatId, friendInfo: response.Result });
+        if (this.users.findIndex(x => x.personalChatId === this.personalChatId) >= 0)
+          return;
+        this.users.push({ friendId: response.Result?.id, friendName: response.Result?.userName } as UserChatModel);
+      });
   }
 }

@@ -1,6 +1,7 @@
 using eCommerce.Application.Users.Dtos;
 using eCommerce.Domain.Repositories;
 using eCommerce.EntityFrameworkCore.Entities;
+using eCommerce.Shared.DataTransferObjects.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Application.Users;
@@ -31,5 +32,21 @@ public class UserService : IUserService
             UserName = x.UserName,
             Id = x.Id
         }).ToListAsync();
+    }
+
+    public async Task<UserPageDto> GetUserInfo(long id)
+    {
+        return await _userRepository.GetAll()
+            .Where(x => x.Id == id)
+            .Select(x => new UserPageDto()
+            {
+                Id = x.Id,
+                Address = x.Address,
+                AvatarUrl = x.AvatarUrl,
+                UserName = x.UserName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                CreationTime = x.CreationTime
+            }).FirstAsync();
     }
 }

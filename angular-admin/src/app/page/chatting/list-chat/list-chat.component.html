@@ -5,7 +5,12 @@
         (hadConversation)="openConversation($event)"
         class="col-4"
       ></app-list-user-chatting>
-      <app-list-message-chatting class="col-8"></app-list-message-chatting>
+      <app-list-message-chatting
+        *ngIf="isShowWindowChat"
+        [openConversationId]="personalChatId"
+        [friendInfo]="friendInfo"
+        class="col-8"
+      ></app-list-message-chatting>
     </div>
   </mat-card-content>
 </mat-card>

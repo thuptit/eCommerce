@@ -19,3 +19,10 @@ export interface MessageChatModel {
     avatarUrl: string;
     message: string;
 }
+
+export interface SendMessageChatModel {
+    senderId: number;
+    personalChatId: number;
+    message: string;
+    receiverId: number;
+}

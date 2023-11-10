@@ -26,12 +26,11 @@ namespace eCommerce.Host.Controllers
             _mediator = mediator;
             _userService = userService;
         }
-        [HttpGet]
+        [HttpGet("{id}")]
         [Authorize]
-        public async Task<string> Get()
+        public async Task<UserPageDto> Get(long id)
         {
-            await Task.CompletedTask;
-            return "Hêlo";
+            return await _userService.GetUserInfo(id);
         }
 
         [HttpPost]

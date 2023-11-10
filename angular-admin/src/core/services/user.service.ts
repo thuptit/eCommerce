@@ -38,4 +38,8 @@ export class UserService extends BaseService {
   getUsers(): Observable<ResponseApi<IdAndNameModel[]>> {
     return this.httpClient.get<any>(this.rootUrl + '/GetAllUser');
   }
+
+  getUserInfo(id: number): Observable<ResponseApi<UserModel>> {
+    return this.httpClient.get<any>(this.rootUrl + '/' + id);
+  }
 }

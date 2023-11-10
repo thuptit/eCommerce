@@ -22,8 +22,10 @@ export class PageComponent implements OnInit {
         event.item.selected = true;
         return event;
       });
-      this._signalr.startConnection();
-      this._signalr.listenerNotification();
+    setTimeout(async () => {
+      await this._signalr.startConnection();
+      this._signalr.listenerMessage();
+    });
   }
 
   private deselected() {
