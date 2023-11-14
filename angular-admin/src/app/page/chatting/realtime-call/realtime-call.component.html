@@ -1,1 +1,34 @@
-<p>realtime-call works!</p>
+<mat-grid-list cols="2" rowHeight="2:1">
+  <mat-grid-tile>
+    <p class="video-description">Local:</p>
+    <video #local_video [autoplay]="true" [muted]="true"></video>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <p class="video-description">Remote:</p>
+    <video #received_video [autoplay]="true"></video>
+  </mat-grid-tile>
+</mat-grid-list>
+<button
+  mat-raised-button
+  color="primary"
+  (click)="startCallLocal()"
+  [disabled]="localVideoActive"
+>
+  Start Local
+</button>
+<button
+  mat-raised-button
+  color="primary"
+  (click)="call()"
+  [disabled]="inCall || !localVideoActive"
+>
+  Call
+</button>
+<button
+  mat-raised-button
+  color="primary"
+  (click)="hangUp()"
+  [disabled]="!inCall"
+>
+  HangUp
+</button>

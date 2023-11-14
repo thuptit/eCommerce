@@ -5,9 +5,9 @@ import { RtcEventHandler, RtcHandlerMessage } from './types/rtc-handler';
 import { MessageCall } from './types/message-call';
 
 const offerOptions = {
-  audio: true,
-  video: true
-};
+  offerAudio: true,
+  offerVideo: true
+} as RTCOfferOptions;
 
 const mediaConstraints = {
   audio: true,
@@ -96,14 +96,18 @@ export class RealtimeCallComponent
       console.error(e);
     }
   }
-  private startCallLocal() {
+  hangUp(): void {
+    this._webRtcService.sendMessage({ type: 'hangup', data: '' });
+    this.closeCall();
+  }
+  startCallLocal() {
     console.log('starting local stream');
     this.localStream.getVideoTracks().forEach(track => {
       track.enabled = true;
     });
     this.localVideo.nativeElement.srcObject = this.localStream;
   }
-  private closeCall() {
+  closeCall() {
     console.log("End calling...");
     if (this.peerConnection) {
       console.log('Closing the peer connection');
@@ -161,7 +165,18 @@ export class RealtimeCallComponent
   }
 
   async call(): Promise<void> {
-
+    this.createPeerConnection();
+    this.localStream.getTracks().forEach(
+      track => this.peerConnection.addTrack(track)
+    );
+    try {
+      const offer = await this.peerConnection.createOffer(offerOptions);
+      await this.peerConnection.setLocalDescription(offer);
+      this.inCall = true;
+    }
+    catch (e: any) {
+      this.handleGetUserMediaError(e);
+    }
   }
 
   private createPeerConnection() {
