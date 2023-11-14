@@ -10,7 +10,7 @@ import { ListMessageChattingComponent } from './list-message-chatting/list-messa
 import { NbCardModule, NbChatModule, NbListModule } from '@nebular/theme';
 import { AddConversationDialogComponent } from './list-user-chatting/add-conversation-dialog/add-conversation-dialog.component';
 import { RealtimeCallComponent } from './realtime-call/realtime-call.component';
-
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,8 @@ import { RealtimeCallComponent } from './realtime-call/realtime-call.component';
     ChattingRoutingModule,
     NbListModule,
     NbCardModule,
-    NbChatModule.forChild()
+    NbChatModule.forChild(),
+    MatGridListModule
   ]
 })
 export class ChattingModule { }
