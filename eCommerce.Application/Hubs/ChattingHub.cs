@@ -33,7 +33,7 @@ namespace eCommerce.Application.Hubs
                 });
             }
             await Clients.Client(_userConnection[message.ReceiverId])
-                .("ReceivedMessage",message);
+                .SendAsync("ReceivedMessage",message);
             var _chatMessageRepository = _iocManager.Resolve<IRepository<MessageChatPersonal, long>>();
             await _chatMessageRepository.InsertAsync(new MessageChatPersonal()
             {
