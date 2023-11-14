@@ -45,10 +45,9 @@ namespace eCommerce.Application.Hubs
             return message.PersonalChatId;
         }
 
-        public override Task OnConnectedAsync()
+        public async Task IncomingCall()
         {
             
-            return base.OnConnectedAsync();
         }
 
         public string GetConnectionId(long userId) 
@@ -56,5 +55,14 @@ namespace eCommerce.Application.Hubs
             _userConnection.TryAdd(userId, Context.ConnectionId);
             return Context.ConnectionId;
         }
+    }
+    public interface IConnectionHub
+    {
+        Task UpdateUserList(List<User> userList);
+        Task CallAccepted(User acceptingUser);
+        Task CallDeclined(User decliningUser, string reason);
+        Task IncomingCall(User callingUser);
+        Task ReceiveSignal(User signalingUser, string signal);
+        Task CallEnded(User signalingUser, string signal);
     }
 }

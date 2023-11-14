@@ -6,6 +6,7 @@ import { LoggerService } from './logger.service';
 import { TokenAuthService } from './token-auth.service';
 import { SendMessageChatModel } from '../models/chatting.model';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { MessageCall } from 'src/app/page/chatting/realtime-call/types/message-call';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,13 @@ export class SignalrService extends BaseService {
       .then((data: any) => {
         this.sentMessageEvent$.next(data);
       });
+  }
+  public sendMessageCall = (msg: MessageCall) => {
+    //TODO: add method
+    this.chatConnection.invoke('sendCall', msg)
+      .then((data) => {
+        console.log(data);
+      })
   }
   connectionId: any;
   private getConnectionId = () => {

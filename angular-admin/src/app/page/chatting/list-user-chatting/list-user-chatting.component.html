@@ -12,7 +12,11 @@
   <nb-list>
     <nb-list-item *ngFor="let user of users">
       <div (click)="openWindowChat(user)">
-        <nb-user [name]="user.friendName"> </nb-user>
+        <nb-user #nbUserChat [name]="user.friendName"> </nb-user>
+        <div class="last-message">
+          <span>{{ user.lastMessage.senderName }}</span>
+          <p>{{ user.lastMessage.message }}</p>
+        </div>
       </div>
     </nb-list-item>
   </nb-list>

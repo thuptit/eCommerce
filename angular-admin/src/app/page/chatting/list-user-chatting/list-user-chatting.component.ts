@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ComponentBase } from 'src/shared/component-base.component';
 import { AddConversationDialogComponent } from './add-conversation-dialog/add-conversation-dialog.component';
@@ -9,6 +9,7 @@ import { UserService } from 'src/core/services/user.service';
 import { mergeMap, of } from 'rxjs';
 import { ResponseApi } from 'src/core/models/response.model';
 import { UserModel } from 'src/core/models/user.model';
+import { NbUserComponent } from '@nebular/theme';
 
 @Component({
   selector: 'app-list-user-chatting',
@@ -27,7 +28,6 @@ export class ListUserChattingComponent extends ComponentBase {
   ngOnInit() {
     this.getChatUsers();
   }
-
   getChatUsers() {
     this._chatService.getListUserChat()
       .subscribe(response => {
