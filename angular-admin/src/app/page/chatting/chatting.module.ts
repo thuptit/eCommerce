@@ -9,6 +9,7 @@ import { ListUserChattingComponent } from './list-user-chatting/list-user-chatti
 import { ListMessageChattingComponent } from './list-message-chatting/list-message-chatting.component';
 import { NbCardModule, NbChatModule, NbListModule } from '@nebular/theme';
 import { AddConversationDialogComponent } from './list-user-chatting/add-conversation-dialog/add-conversation-dialog.component';
+import { RealtimeCallComponent } from './realtime-call/realtime-call.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { AddConversationDialogComponent } from './list-user-chatting/add-convers
     ChattingComponent,
     ListUserChattingComponent,
     ListMessageChattingComponent,
-    AddConversationDialogComponent
+    AddConversationDialogComponent,
+    RealtimeCallComponent
   ],
   imports: [
     CommonModule,
