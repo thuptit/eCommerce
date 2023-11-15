@@ -24,7 +24,7 @@ export class PageComponent implements OnInit {
       });
     setTimeout(async () => {
       await this._signalr.startConnection();
-      await this._signalr.getConnectionId();
+      //await this._signalr.getConnectionId();
       this._signalr.listenerMessage();
       this._signalr.listenerCall();
     });

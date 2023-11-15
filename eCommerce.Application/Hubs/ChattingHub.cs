@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using eCommerce.Domain.Repositories;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared.DataTransferObjects.Chats;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eCommerce.Application.Hubs
 {
+    [Authorize]
     public class ChattingHub : Hub
     {
         private readonly IIocManager _iocManager;
@@ -50,14 +52,30 @@ namespace eCommerce.Application.Hubs
 
         public async Task SendCall(CallDto message, long receiverId)
         {
-            // await Clients.User(_clientManager.Clients[receiverId])
-            //     .SendAsync("Calling", message);
+            foreach (var connectionId in _connections.GetConnections(receiverId))
+            {
+                await Clients.Client(connectionId).SendAsync("Calling", message);
+            }
         }
 
-        public string GetConnectionId(long userId) 
+        public override Task OnConnectedAsync()
         {
-            _connections.Add(userId, Context.ConnectionId);
-            return Context.ConnectionId;
+            var idValue = Context.User.Claims.FirstOrDefault(x => x.Type == "Id").Value;
+            if (int.TryParse(idValue,out int userId))
+            {
+                _connections.Add(userId,Context.ConnectionId);
+            }
+            return base.OnConnectedAsync();
+        }
+
+        public override Task OnDisconnectedAsync(Exception? exception)
+        {
+            var idValue = Context.User.Claims.FirstOrDefault(x => x.Type == "Id").Value;
+            if (int.TryParse(idValue,out int userId))
+            {
+                _connections.Remove(userId,Context.ConnectionId);
+            }
+            return base.OnDisconnectedAsync(exception);
         }
     }
 
