@@ -11,12 +11,22 @@ export class ListChatComponent extends ComponentBase {
   personalChatId!: number;
   friendInfo!: UserModel;
   isShowWindowChat: boolean = false;
+  isShowVideoCall: boolean = false;
+  receiverId!: number;
   constructor() {
     super();
   }
   openConversation(event: any) {
-    this.personalChatId = event.personalChatId;
-    this.friendInfo = event.friendInfo;
-    this.isShowWindowChat = true;
+    if (event.friendId) {
+      this.isShowWindowChat = false;
+      this.isShowVideoCall = true;
+      this.receiverId = event.friendId;
+    }
+    else {
+      this.personalChatId = event.personalChatId;
+      this.friendInfo = event.friendInfo;
+      this.isShowWindowChat = true;
+      this.isShowVideoCall = false;
+    }
   }
 }
