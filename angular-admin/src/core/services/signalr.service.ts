@@ -21,7 +21,7 @@ export class SignalrService extends BaseService {
   private chatConnection!: HubConnection;
   public startConnection = async () => {
     this.chatConnection = new HubConnectionBuilder()
-      .withUrl(this.baseUrl + '/signalr-notification')
+      .withUrl(this.baseUrl + '/signalr-notification', { accessTokenFactory: () => this._authToken.getToken() })
       .withAutomaticReconnect()
       .build();
     this.chatConnection.keepAliveIntervalInMilliseconds = 500;
@@ -52,13 +52,13 @@ export class SignalrService extends BaseService {
       this.receiveCall$.next(msg);
     })
   }
-  connectionId: any;
-  getConnectionId = async () => {
-    await this.chatConnection.invoke('getconnectionid', this._authToken.getUser().userId)
-      .then((data: any) => {
-        this.connectionId = data;
-      });
-  }
+  // connectionId: any;
+  // getConnectionId = async () => {
+  //   await this.chatConnection.invoke('getconnectionid', this._authToken.getUser().userId)
+  //     .then((data: any) => {
+  //       this.connectionId = data;
+  //     });
+  // }
   constructor(private _httpClient: HttpClient, private _logger: LoggerService, private _authToken: TokenAuthService) {
     super(_httpClient);
   }
