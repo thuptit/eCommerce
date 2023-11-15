@@ -17,7 +17,7 @@ export class SignalrService extends BaseService {
   }
   public sentMessageEvent$ = new BehaviorSubject<number>(0);
   public receivedMessageEvent$ = new BehaviorSubject<SendMessageChatModel>({} as SendMessageChatModel);
-  public receiveCall$ = new Subject<MessageCall>();
+  public receiveCall$ = new BehaviorSubject<MessageCall>({} as MessageCall);
   private chatConnection!: HubConnection;
   public startConnection = async () => {
     this.chatConnection = new HubConnectionBuilder()
@@ -42,23 +42,15 @@ export class SignalrService extends BaseService {
       });
   }
   public sendMessageCall = async (msg: MessageCall, receiverId: number) => {
-    await this.chatConnection.invoke('sendCall', msg, receiverId)
-      .then((data) => {
-        console.log(data);
-      })
+    await this.chatConnection.invoke('SendCall', msg, receiverId);
   }
   public listenerCall = () => {
+    console.log("Start Calling ...")
     this.chatConnection.on('Calling', (msg: MessageCall) => {
+      console.log("socket listen", msg);
       this.receiveCall$.next(msg);
     })
   }
-  // connectionId: any;
-  // getConnectionId = async () => {
-  //   await this.chatConnection.invoke('getconnectionid', this._authToken.getUser().userId)
-  //     .then((data: any) => {
-  //       this.connectionId = data;
-  //     });
-  // }
   constructor(private _httpClient: HttpClient, private _logger: LoggerService, private _authToken: TokenAuthService) {
     super(_httpClient);
   }

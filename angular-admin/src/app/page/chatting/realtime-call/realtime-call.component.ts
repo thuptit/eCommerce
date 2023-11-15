@@ -1,8 +1,8 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { WebRtcService } from 'src/core/services/web-rtc.service';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { RtcEventHandler, RtcHandlerMessage } from './types/rtc-handler';
 import { MessageCall } from './types/message-call';
+import { SignalrService } from 'src/core/services/signalr.service';
 
 const offerOptions = {
   offerAudio: true,
@@ -19,7 +19,7 @@ const mediaConstraints = {
   templateUrl: './realtime-call.component.html',
   styleUrls: ['./realtime-call.component.scss']
 })
-export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler {
+export class RealtimeCallComponent implements AfterViewInit, RtcHandlerMessage, RtcEventHandler {
   @Input() receiverId!: number;
   private peerConnection!: RTCPeerConnection;
   private localStream!: MediaStream;
@@ -30,9 +30,43 @@ export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler
   @ViewChild('local_video') localVideo!: ElementRef;
   @ViewChild('received_video') remoteVideo!: ElementRef;
 
-  constructor(private _webRtcService: WebRtcService) {
+  constructor(private _signalR: SignalrService) {
+  }
+  async ngAfterViewInit() {
+    await this.requestMediaDevice();
+    this.addIncominMessageHandler();
   }
 
+  private addIncominMessageHandler() {
+    this._signalR.receiveCall$.asObservable().subscribe({
+      next: (msg) => {
+        console.log("incoming calling", msg);
+        switch (msg.type) {
+          case 'offer':
+            this.handleOfferMessage(msg.data);
+            break;
+          case 'answer':
+            this.handleAnswerMessage(msg.data);
+            break;
+          case 'hangup':
+            this.handleHangupMessage(msg);
+            break;
+          case 'ice-candidate':
+            this.handleICECandidateMessage(msg.data);
+            break;
+          default:
+            console.log('unknown message of type ' + msg.type);
+        }
+      },
+      complete: () => {
+        console.log("Complete event")
+      },
+      error(err) {
+        console.log("event error");
+      },
+    }
+    );
+  }
   private handleGetUserMediaError(e: Error) {
     switch (e.name) {
       case 'NotFoundError':
@@ -55,7 +89,7 @@ export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler
   handleICECandidateEvent = (event: RTCPeerConnectionIceEvent) => {
     console.log(event);
     if (event.candidate) {
-      this._webRtcService.sendMessage({
+      this._signalR.sendMessageCall({
         type: 'ice-candidate',
         data: event.candidate
       }, this.receiverId);
@@ -78,7 +112,7 @@ export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler
     }
   };
   handleTrackEvent = (event: RTCTrackEvent) => {
-    console.log(event);
+    console.log("on track remote:", event);
     this.remoteVideo.nativeElement.srcObject = event.streams[0];
   };
   //end event
@@ -87,20 +121,21 @@ export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler
   private async requestMediaDevice() {
     try {
       this.localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+
+      this.pauseLocalVideo();
     }
     catch (e) {
       console.error(e);
     }
   }
-  hangUp(): void {
-    this._webRtcService.sendMessage({ type: 'hangup', data: '' }, this.receiverId);
+  async hangUp() {
+    await this._signalR.sendMessageCall({ type: 'hangup', data: '' }, this.receiverId);
     this.closeCall();
   }
   async startCallLocal() {
     console.log('starting local stream');
-    await this.requestMediaDevice();
     this.localVideoActive = true;
-    this.localStream.getVideoTracks().forEach(track => {
+    this.localStream.getTracks().forEach(track => {
       track.enabled = true;
     });
     this.localVideo.nativeElement.srcObject = this.localStream;
@@ -124,20 +159,33 @@ export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler
     }
 
   }
-  handleOfferMessage(msg: RTCSessionDescriptionInit): void {
+
+  pauseLocalVideo(): void {
+    console.log('pause local stream');
+    this.localStream.getTracks().forEach(track => {
+      track.enabled = false;
+    });
+    this.localVideo.nativeElement.srcObject = undefined;
+
+    this.localVideoActive = false;
+  }
+
+  async handleOfferMessage(msg: RTCSessionDescriptionInit) {
     console.log('handle incoming message');
     if (!this.peerConnection) {
       this.createPeerConnection();
     }
 
     if (!this.localStream) {
-      this.startCallLocal();
+      await this.startCallLocal();
     }
-    this.peerConnection.setRemoteDescription(new RTCSessionDescription(msg))
+    await this.peerConnection.setRemoteDescription(new RTCSessionDescription(msg))
       .then(() => {
         this.localVideo.nativeElement.srcObject = this.localStream;
+        console.log("tracks:", this.localStream.getTracks());
+
         this.localStream.getTracks().forEach(
-          track => this.peerConnection.addTrack(track)
+          track => this.peerConnection.addTrack(track, this.localStream)
         )
       })
       .then(() => {
@@ -147,30 +195,34 @@ export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler
         return this.peerConnection.setLocalDescription(answer);
       })
       .then(() => {
-        this._webRtcService.sendMessage({ type: 'answer', data: this.peerConnection.localDescription }, this.receiverId);
         this.inCall = true;
+        return this._signalR.sendMessageCall({ type: 'answer', data: this.peerConnection.localDescription }, this.receiverId);
+      })
+      .then(() => {
+        console.log("end create offer");
       })
   }
-  handleAnswerMessage(msg: RTCSessionDescriptionInit): void {
-    this.peerConnection.setRemoteDescription(msg)
+  async handleAnswerMessage(msg: RTCSessionDescriptionInit) {
+    await this.peerConnection.setRemoteDescription(msg)
   }
   handleHangupMessage(msg: MessageCall): void {
     this.closeCall();
   }
-  handleICECandidateMessage(msg: RTCIceCandidate): void {
+  async handleICECandidateMessage(msg: RTCIceCandidate) {
     const candidate = new RTCIceCandidate(msg);
-    this.peerConnection.addIceCandidate(candidate).catch(this.reportError);
+    await this.peerConnection.addIceCandidate(candidate).catch(this.reportError);
   }
 
   async call(): Promise<void> {
     this.createPeerConnection();
     this.localStream.getTracks().forEach(
-      track => this.peerConnection.addTrack(track)
+      track => this.peerConnection.addTrack(track, this.localStream)
     );
     try {
       const offer = await this.peerConnection.createOffer(offerOptions);
       await this.peerConnection.setLocalDescription(offer);
       this.inCall = true;
+      await this._signalR.sendMessageCall({ type: 'offer', data: offer }, this.receiverId);
     }
     catch (e: any) {
       this.handleGetUserMediaError(e);
