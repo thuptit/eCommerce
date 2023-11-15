@@ -7,7 +7,7 @@ import { MessageCall } from 'src/app/page/chatting/realtime-call/types/message-c
 export class WebRtcService {
   constructor(private _signalR: SignalrService) { }
 
-  sendMessage(msg: MessageCall) {
-    this._signalR.sendMessageCall(msg);
+  sendMessage(msg: MessageCall, receiverId: number) {
+    this._signalR.sendMessageCall(msg, receiverId);
   }
 }

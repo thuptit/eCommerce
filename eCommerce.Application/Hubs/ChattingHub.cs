@@ -13,14 +13,15 @@ using eCommerce.Shared.DataTransferObjects.Chats;
 
 namespace eCommerce.Application.Hubs
 {
-    public class ChattingHub : Hub, ISingletonDependency
+    public class ChattingHub : Hub
     {
         private readonly IIocManager _iocManager;
+        private readonly static ConnectionMapping<long> _connections = 
+            new ConnectionMapping<long>();
         public ChattingHub(IIocManager iocManager)
         {
             _iocManager = iocManager;
         }
-        private ConcurrentDictionary<long, string> _userConnection = new ConcurrentDictionary<long, string>();
         public async Task<long> SendMessage(SendMessageChatDto message)
         {
             if (message.PersonalChatId == 0)
@@ -32,8 +33,10 @@ namespace eCommerce.Application.Hubs
                     UserB_Id = message.ReceiverId
                 });
             }
-            await Clients.Client(_userConnection[message.ReceiverId])
-                .SendAsync("ReceivedMessage",message);
+            foreach (var connectionId in _connections.GetConnections(message.ReceiverId))
+            {
+                await Clients.Client(connectionId).SendAsync("ReceivedMessage", message);
+            }
             var _chatMessageRepository = _iocManager.Resolve<IRepository<MessageChatPersonal, long>>();
             await _chatMessageRepository.InsertAsync(new MessageChatPersonal()
             {
@@ -45,24 +48,22 @@ namespace eCommerce.Application.Hubs
             return message.PersonalChatId;
         }
 
-        public async Task IncomingCall()
+        public async Task SendCall(CallDto message, long receiverId)
         {
-            
+            // await Clients.User(_clientManager.Clients[receiverId])
+            //     .SendAsync("Calling", message);
         }
 
         public string GetConnectionId(long userId) 
         {
-            _userConnection.TryAdd(userId, Context.ConnectionId);
+            _connections.Add(userId, Context.ConnectionId);
             return Context.ConnectionId;
         }
     }
-    public interface IConnectionHub
+
+    public class CallDto
     {
-        Task UpdateUserList(List<User> userList);
-        Task CallAccepted(User acceptingUser);
-        Task CallDeclined(User decliningUser, string reason);
-        Task IncomingCall(User callingUser);
-        Task ReceiveSignal(User signalingUser, string signal);
-        Task CallEnded(User signalingUser, string signal);
+        public string Type { get; set; }
+        public dynamic Data { get; set; }
     }
 }

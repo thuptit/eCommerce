@@ -11,6 +11,11 @@
         [friendInfo]="friendInfo"
         class="col-8"
       ></app-list-message-chatting>
+      <app-realtime-call
+        class="col-8"
+        *ngIf="isShowVideoCall"
+        [receiverId]="receiverId"
+      ></app-realtime-call>
     </div>
   </mat-card-content>
 </mat-card>

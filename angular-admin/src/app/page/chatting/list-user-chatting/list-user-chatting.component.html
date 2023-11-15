@@ -11,11 +11,20 @@
   </nb-card-header>
   <nb-list>
     <nb-list-item *ngFor="let user of users">
-      <div (click)="openWindowChat(user)">
-        <nb-user #nbUserChat [name]="user.friendName"> </nb-user>
-        <div class="last-message">
-          <span>{{ user.lastMessage.senderName }}</span>
-          <p>{{ user.lastMessage.message }}</p>
+      <div class="row w-100 align-items-center">
+        <div class="col" (click)="openWindowChat(user)">
+          <nb-user #nbUserChat [name]="user.friendName"> </nb-user>
+          <span>{{ user.lastMessage.message }}</span>
+        </div>
+        <div class="col text-align-end">
+          <button
+            type="button"
+            mat-mini-fab
+            class="bg-success"
+            (click)="openVideoCall(user)"
+          >
+            <nb-icon icon="phone-call-outline"></nb-icon>
+          </button>
         </div>
       </div>
     </nb-list-item>

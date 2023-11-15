@@ -17,14 +17,16 @@ export class SignalrService extends BaseService {
   }
   public sentMessageEvent$ = new BehaviorSubject<number>(0);
   public receivedMessageEvent$ = new BehaviorSubject<SendMessageChatModel>({} as SendMessageChatModel);
+  public receiveCall$ = new Subject<MessageCall>();
   private chatConnection!: HubConnection;
   public startConnection = async () => {
     this.chatConnection = new HubConnectionBuilder()
       .withUrl(this.baseUrl + '/signalr-notification')
+      .withAutomaticReconnect()
       .build();
+    this.chatConnection.keepAliveIntervalInMilliseconds = 500;
     await this.chatConnection.start()
       .then((data: any) => console.log('Connection Started ...'))
-      .then(() => this.getConnectionId())
       .catch((error: any) => console.log(error));
   }
   public listenerMessage = () => {
@@ -33,22 +35,26 @@ export class SignalrService extends BaseService {
       this.receivedMessageEvent$.next(data);
     })
   }
-  public sendMessage = (data: SendMessageChatModel) => {
-    this.chatConnection.invoke('SendMessage', data)
+  public sendMessage = async (data: SendMessageChatModel) => {
+    await this.chatConnection.invoke('SendMessage', data)
       .then((data: any) => {
         this.sentMessageEvent$.next(data);
       });
   }
-  public sendMessageCall = (msg: MessageCall) => {
-    //TODO: add method
-    this.chatConnection.invoke('sendCall', msg)
+  public sendMessageCall = async (msg: MessageCall, receiverId: number) => {
+    await this.chatConnection.invoke('sendCall', msg, receiverId)
       .then((data) => {
         console.log(data);
       })
   }
+  public listenerCall = () => {
+    this.chatConnection.on('Calling', (msg: MessageCall) => {
+      this.receiveCall$.next(msg);
+    })
+  }
   connectionId: any;
-  private getConnectionId = () => {
-    this.chatConnection.invoke('getconnectionid', this._authToken.getUser().userId)
+  getConnectionId = async () => {
+    await this.chatConnection.invoke('getconnectionid', this._authToken.getUser().userId)
       .then((data: any) => {
         this.connectionId = data;
       });

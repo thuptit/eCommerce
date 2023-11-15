@@ -38,6 +38,9 @@ export class ListUserChattingComponent extends ComponentBase {
   openWindowChat(user: UserChatModel) {
     this.handleChatAction(user.friendId);
   }
+  openVideoCall(user: UserChatModel) {
+    this.hadConversation.emit({ friendId: user.friendId });
+  }
   openAddConversationDialog() {
     const dialogRef = this.dialog.open(AddConversationDialogComponent, {
       autoFocus: true,

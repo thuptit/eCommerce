@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { WebRtcService } from 'src/core/services/web-rtc.service';
 import { environment } from 'src/environments/environment';
 import { RtcEventHandler, RtcHandlerMessage } from './types/rtc-handler';
@@ -12,10 +12,6 @@ const offerOptions = {
 const mediaConstraints = {
   audio: true,
   video: { width: 1280, height: 720 }
-  // video: {width: 1280, height: 720} // 16:9
-  // video: {width: 960, height: 540}  // 16:9
-  // video: {width: 640, height: 480}  //  4:3
-  // video: {width: 160, height: 120}  //  4:3
 };
 
 @Component({
@@ -23,9 +19,8 @@ const mediaConstraints = {
   templateUrl: './realtime-call.component.html',
   styleUrls: ['./realtime-call.component.scss']
 })
-export class RealtimeCallComponent
-  implements RtcHandlerMessage,
-  RtcEventHandler {
+export class RealtimeCallComponent implements RtcHandlerMessage, RtcEventHandler {
+  @Input() receiverId!: number;
   private peerConnection!: RTCPeerConnection;
   private localStream!: MediaStream;
 
@@ -34,6 +29,7 @@ export class RealtimeCallComponent
 
   @ViewChild('local_video') localVideo!: ElementRef;
   @ViewChild('received_video') remoteVideo!: ElementRef;
+
   constructor(private _webRtcService: WebRtcService) {
   }
 
@@ -62,7 +58,7 @@ export class RealtimeCallComponent
       this._webRtcService.sendMessage({
         type: 'ice-candidate',
         data: event.candidate
-      });
+      }, this.receiverId);
     }
   };
   handleICEConnectionStateChangeEvent = (event: Event) => {
@@ -97,11 +93,13 @@ export class RealtimeCallComponent
     }
   }
   hangUp(): void {
-    this._webRtcService.sendMessage({ type: 'hangup', data: '' });
+    this._webRtcService.sendMessage({ type: 'hangup', data: '' }, this.receiverId);
     this.closeCall();
   }
-  startCallLocal() {
+  async startCallLocal() {
     console.log('starting local stream');
+    await this.requestMediaDevice();
+    this.localVideoActive = true;
     this.localStream.getVideoTracks().forEach(track => {
       track.enabled = true;
     });
@@ -149,7 +147,7 @@ export class RealtimeCallComponent
         return this.peerConnection.setLocalDescription(answer);
       })
       .then(() => {
-        this._webRtcService.sendMessage({ type: 'answer', data: this.peerConnection.localDescription });
+        this._webRtcService.sendMessage({ type: 'answer', data: this.peerConnection.localDescription }, this.receiverId);
         this.inCall = true;
       })
   }
