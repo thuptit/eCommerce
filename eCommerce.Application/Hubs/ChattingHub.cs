@@ -11,6 +11,7 @@ using eCommerce.Domain.Repositories;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared.DataTransferObjects.Chats;
 using Microsoft.AspNetCore.Authorization;
+using ISingletonDependency = Volo.Abp.DependencyInjection.ISingletonDependency;
 
 namespace eCommerce.Application.Hubs
 {
@@ -20,6 +21,8 @@ namespace eCommerce.Application.Hubs
         private readonly IIocManager _iocManager;
         private readonly static ConnectionMapping<long> _connections = 
             new ConnectionMapping<long>();
+
+        public static ConnectionMapping<long> _currentConnections => _connections;
         public ChattingHub(IIocManager iocManager)
         {
             _iocManager = iocManager;

@@ -27,4 +27,7 @@ export class ChatService extends BaseService {
   getListMessageChat(personalChatId: number): Observable<ResponseApi<MessageChatModel[]>> {
     return this.httpClient.get<any>(this.rootUrl + '/GetListMessageChat/' + personalChatId);
   }
+  getOnlineUser(friendIds: number[]): Observable<ResponseApi<boolean[]>> {
+    return this.httpClient.post<any>(this.rootUrl + '/GetOnlineUser', friendIds);
+  }
 }

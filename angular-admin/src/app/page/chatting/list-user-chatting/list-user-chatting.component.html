@@ -13,7 +13,7 @@
     <nb-list-item *ngFor="let user of users">
       <div class="row w-100 align-items-center">
         <div class="col" (click)="openWindowChat(user)">
-          <nb-user #nbUserChat [name]="user.friendName"> </nb-user>
+          <nb-user #nbUserChat [name]="user.friendName"></nb-user>
           <span>{{ user.lastMessage.message }}</span>
         </div>
         <div class="col text-align-end">
@@ -25,6 +25,12 @@
           >
             <nb-icon icon="phone-call-outline"></nb-icon>
           </button>
+          <nb-icon
+            [ngClass]="user.isOnline ? 'bg-success' : ''"
+            class="ms-2 text-success"
+            style="border-radius: 50%; width: 15px; height: 15px"
+            icon="radio-button-off-outline"
+          ></nb-icon>
         </div>
       </div>
     </nb-list-item>
