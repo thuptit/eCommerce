@@ -1,4 +1,5 @@
 using System.Linq.Dynamic.Core;
+using eCommerce.Application.Hubs;
 using eCommerce.Domain.Repositories;
 using eCommerce.EntityFrameworkCore.Entities;
 using eCommerce.Shared.Cores.Sessions;
@@ -18,7 +19,7 @@ public class ChatService : IChatService
     }
     public async Task<List<UserChatDto>> GetListUserChat(long userId)
     {
-        return await _personalChatRepository.GetAll()
+        var result = await _personalChatRepository.GetAll()
             .Where(x => x.UserA_Id == userId || x.UserB_Id == userId)
             .Select(x => new UserChatDto()
             {
@@ -33,9 +34,17 @@ public class ChatService : IChatService
                         SenderId = s.SenderId,
                         Message = s.Message,
                         SenderName = s.Sender.UserName,
-                        SeenDate = s.SeenTime
-                    }).FirstOrDefault()
+                        SeenDate = s.SeenTime,
+                    }).FirstOrDefault(),
             }).ToListAsync();
+        foreach (var userChatDto in result)
+        {
+            userChatDto.IsOnline = ChattingHub._currentConnections.GetConnections(userChatDto.FriendId).Any()
+                ? true
+                : false;
+        }
+
+        return result;
     }
 
     public async Task<long> GetConversation(long friendId)
@@ -59,7 +68,7 @@ public class ChatService : IChatService
                 SenderId = x.SenderId,
                 SenderName = x.Sender.UserName,
                 Message = x.Message,
-                AvatarUrl = x.Sender.AvatarUrl
+                AvatarUrl = x.Sender.AvatarUrl,
             })
             .ToListAsync();
     }

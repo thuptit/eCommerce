@@ -9,6 +9,7 @@ export interface UserChatModel {
     friendName: string;
     friendAvatarUrl: string;
     lastMessage: MessageChatModel;
+    isOnline: boolean;
 }
 
 export interface MessageChatModel {

@@ -7,6 +7,7 @@ public class UserChatDto
     public string FriendName { get; set; }
     public string FriendAvatarUrl { get; set; }
     public ChatMessageDto? LastMessage { get; set; }
+    public bool IsOnline { get; set; }
 }
 
 public class ChatMessageDto

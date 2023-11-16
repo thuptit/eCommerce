@@ -6,7 +6,7 @@ import { CreateConversationDataDialogModel, UserChatModel } from 'src/core/model
 import { DialogMode } from 'src/shared/constants';
 import { ChatService } from 'src/core/services/chat.service';
 import { UserService } from 'src/core/services/user.service';
-import { mergeMap, of } from 'rxjs';
+import { interval, mergeMap, of } from 'rxjs';
 import { ResponseApi } from 'src/core/models/response.model';
 import { UserModel } from 'src/core/models/user.model';
 import { NbUserComponent } from '@nebular/theme';
@@ -20,6 +20,7 @@ export class ListUserChattingComponent extends ComponentBase {
   users: UserChatModel[] = [];
   @Output() hadConversation = new EventEmitter<any>();
   personalChatId: number = 0;
+  onlineStatus$ = interval(10000);
   constructor(public dialog: MatDialog, private _chatService: ChatService,
     private _userService: UserService) {
     super();
@@ -27,6 +28,20 @@ export class ListUserChattingComponent extends ComponentBase {
 
   ngOnInit() {
     this.getChatUsers();
+    this.onlineStatus$.subscribe(() => {
+      this.getOnlineUser();
+    })
+  }
+  getOnlineUser() {
+    this._chatService.getOnlineUser(this.users.map(item => item.friendId))
+      .subscribe(response => {
+        if (!response.Success)
+          return;
+        const result = response.Result ?? [];
+        for (let i = 0; i < this.users.length; i++) {
+          this.users[i].isOnline = result[i];
+        }
+      })
   }
   getChatUsers() {
     this._chatService.getListUserChat()

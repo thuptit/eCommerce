@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eCommerce.Application.Chattings;
+using eCommerce.Application.Hubs;
 using eCommerce.Shared.DataTransferObjects.Chats;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +37,17 @@ namespace eCommerce.Host.Controllers
         public async Task<List<ChatMessageDto>> GetListMessageChat(long personalChatId)
         {
             return await _chatService.GetListMessageChat(personalChatId);
+        }
+
+        [HttpPost("GetOnlineUser")]
+        public async Task<List<bool>> GetOnlineUser(List<long> friendIds)
+        {
+            var result = new List<bool>();
+            foreach (var friendId in friendIds)
+            {
+                result.Add(ChattingHub._currentConnections.GetConnections(friendId).Any());
+            }
+            return result;
         }
     }
 }
